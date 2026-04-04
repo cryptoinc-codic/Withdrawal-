@@ -7,553 +7,333 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
         
+        :root {
+            --primary: #2563eb;
+            --primary-glow: rgba(37, 99, 235, 0.4);
+            --accent-green: #10b981;
+        }
+
         * {
-            transition: background-color 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
-        }
-
-        /* ========= DARK MODE (DEFAULT - RICH, PROFESSIONAL) ========= */
-        body.dark-mode {
-            background: #060b14;
-            background-image: radial-gradient(ellipse at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 60%);
-            color: #eef2ff;
-        }
-
-        body.dark-mode .neo-glass {
-            background: rgba(8, 14, 23, 0.94);
-            backdrop-filter: blur(24px) saturate(190%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.6);
-        }
-
-        body.dark-mode .method-card input:checked + label {
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.12);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.18);
-        }
-
-        body.dark-mode .card-bg {
-            background: #0f1622;
-            border-color: #1e293b;
-        }
-
-        body.dark-mode .input-modern {
-            background: #0f1622;
-            border-color: #253041;
-            color: #f1f5f9;
-        }
-        body.dark-mode .input-modern::placeholder {
-            color: #6c7a91;
-        }
-        body.dark-mode .label-primary {
-            color: #b9c7dd;
-        }
-        body.dark-mode .text-balance {
-            color: #ffffff;
-        }
-        body.dark-mode .text-fee {
-            color: #b9c7dd;
-        }
-        body.dark-mode .fee-container {
-            background: #0b101a;
-            border-color: #1e2a3c;
-        }
-        body.dark-mode .network-label {
-            color: #e2e8f0;
-        }
-        body.dark-mode .security-tag {
-            color: #9ca3af;
-        }
-        body.dark-mode .warning-text {
-            color: #f97316;
-            background: rgba(249, 115, 22, 0.1);
-        }
-
-        /* ========= LIGHT MODE (SMOOTH OFF-WHITE, LOW CONTRAST, ELEGANT) ========= */
-        body.light-mode {
-            background: #f7f5f0;
-            background-image: radial-gradient(circle at 15% 30%, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
-            color: #2c2b28;
-        }
-
-        body.light-mode .neo-glass {
-            background: rgba(250, 248, 242, 0.96);
-            backdrop-filter: blur(24px) saturate(200%);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: 0 30px 45px -18px rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-mode .method-card input:checked + label {
-            border-color: #8b7f6e;
-            background: rgba(139, 127, 110, 0.06);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-        }
-
-        body.light-mode .card-bg {
-            background: #fdfcf9;
-            border-color: #e8e4db;
-        }
-
-        body.light-mode .input-modern {
-            background: #fefdfa;
-            border-color: #e2ddd2;
-            color: #2c2b28;
-        }
-        body.light-mode .input-modern::placeholder {
-            color: #b7af9f;
-        }
-        body.light-mode .label-primary {
-            color: #7f7665;
-        }
-        body.light-mode .text-balance {
-            color: #2c2b28;
-        }
-        body.light-mode .text-fee {
-            color: #6f685a;
-        }
-        body.light-mode .fee-container {
-            background: #faf8f3;
-            border-color: #e8e4db;
-        }
-        body.light-mode .network-label {
-            color: #4a453c;
-        }
-        body.light-mode .security-tag {
-            color: #8a8272;
-        }
-        body.light-mode .warning-text {
-            color: #b45f2b;
-            background: rgba(180, 95, 43, 0.08);
-        }
-
-        .pulse-secure {
-            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
-            animation: pulse 2.2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
-            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-
-        .theme-toggle-icon {
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .theme-toggle-icon:hover {
-            transform: scale(1.08);
-            opacity: 0.8;
-        }
-
-        .glow-btn {
-            transition: all 0.2s ease;
-        }
-        .glow-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 20px 30px -12px rgba(37, 99, 235, 0.4);
-        }
-
-        input:focus, button:focus {
-            outline: none;
-        }
-
-        .max-badge {
-            transition: all 0.15s ease;
-        }
-        .max-badge:hover {
-            background: rgba(37, 99, 235, 0.12);
-            border-radius: 20px;
-        }
-
-        .method-card label {
-            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        /* Warning shake animation */
-        .warning-shake {
-            animation: shake 0.3s ease-in-out 0s 2;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
-        }
-
-        /* Dollar sign inside input */
-        .dollar-input-wrapper {
-            position: relative;
+            min-height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
         }
-        .dollar-sign {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.25rem;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            color: #8a99b0;
-            pointer-events: none;
-            z-index: 2;
+
+        /* Institutional Dark Mode (Default) */
+        body.dark-mode {
+            background: #030712;
+            color: #f3f4f6;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
         }
-        body.dark-mode .dollar-sign {
-            color: #6c7a91;
+
+        /* Executive Light Mode */
+        body.light-mode {
+            background: #f8fafc;
+            color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(248, 250, 252, 1) 0px, transparent 50%);
         }
-        body.light-mode .dollar-sign {
-            color: #b7af9f;
+
+        .glass-panel {
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .withdrawal-input {
-            padding-left: 32px !important;
+
+        .dark-mode .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
+
+        .light-mode .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group:focus-within label {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .method-card input:checked + label {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.08);
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px var(--primary-glow);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .status-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.1); }
+        }
+
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
-<body class="dark-mode flex items-center justify-center min-h-screen p-5 md:p-6">
-    <!-- DARK MODE IS DEFAULT -->
+<body class="dark-mode p-4">
 
-    <div class="w-full max-w-xl">
-        <!-- Top status bar with eye toggle -->
-        <div class="flex justify-between items-center mb-6 px-2">
-            <div class="flex items-center gap-3">
-                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-secure"></div>
-                <span class="text-[11px] font-bold uppercase tracking-wider security-tag">Security: Tier 3 (HSM)</span>
+    <div class="w-full max-w-2xl relative">
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-blue-600 rounded-full blur-[100px] opacity-20"></div>
+        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-600 rounded-full blur-[100px] opacity-20"></div>
+
+        <div class="flex flex-wrap justify-between items-end mb-6 px-4 gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="relative flex h-2 w-2">
+                        <span class="status-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60">System Protocol: HSM-Active</span>
+                </div>
+                <h2 class="text-xs font-mono font-medium opacity-40">NODE_ID: NEXUS-882-XPL // LONDON_DC</h2>
             </div>
-            <div class="flex items-center gap-4">
-                <span class="text-[11px] font-mono font-semibold text-blue-600 dark:text-blue-400 tracking-wide">Terminal: #882-XPL</span>
-                <!-- Eye icon: toggles between dark (default) and light mode (smooth low-contrast) -->
-                <i class="fas fa-eye-slash theme-toggle-icon text-gray-200 dark:text-gray-200 text-sm cursor-pointer" id="themeEyeIcon"></i>
+            
+            <button id="themeToggle" class="glass-panel p-2.5 rounded-xl hover:bg-white/10 active:scale-95">
+                <i id="themeIcon" class="fas fa-moon text-blue-400"></i>
+            </button>
+        </div>
+
+        <div class="glass-panel rounded-[2.5rem] overflow-hidden relative">
+            <div class="shimmer absolute inset-0 pointer-events-none"></div>
+            
+            <div class="p-8 md:p-12">
+                <div class="flex justify-between items-start mb-10">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
+                            Payout <span class="text-blue-500">Terminal</span>
+                        </h1>
+                        <p class="text-sm opacity-50 font-medium">Institutional Grade Asset Displacement</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-bold px-3 py-1 bg-blue-500/10 text-blue-500 border border-blue-500/20 rounded-full uppercase tracking-widest">Multi-Sig v3</span>
+                    </div>
+                </div>
+
+                <form id="withdrawalForm" class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Available Liquidity</label>
+                            <div class="glass-panel bg-white/5 rounded-2xl p-5 border-white/5">
+                                <span class="block text-xs opacity-40 mb-1">Total USD Value</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl md:text-3xl font-bold mono-font" id="displayBalance">$42,950.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Disbursement Amount</label>
+                            <div class="relative group">
+                                <input type="number" id="withdrawAmount" step="0.01" placeholder="0.00" 
+                                    class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl p-5 text-2xl font-bold mono-font focus:border-blue-500 focus:bg-blue-500/5 outline-none transition-all">
+                                <button type="button" id="maxBtn" class="absolute right-4 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-blue-500 text-[10px] font-black text-white hover:bg-blue-400 transition-colors">MAX</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-4 ml-1">Settlement Network</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="method-card">
+                                <input type="radio" name="network" id="btc" value="BTC" class="hidden" checked>
+                                <label for="btc" class="flex items-center gap-4 p-5 rounded-2xl border border-white/5 glass-panel bg-white/5 cursor-pointer">
+                                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-orange-500/10 text-orange-500">
+                                        <i class="fab fa-bitcoin text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-sm">Bitcoin</p>
+                                        <p class="text-[10px] opacity-40 uppercase tracking-tighter">Blockchain L1</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="method-card">
+                                <input type="radio" name="network" id="paypal" value="PayPal" class="hidden">
+                                <label for="paypal" class="flex items-center gap-4 p-5 rounded-2xl border border-white/5 glass-panel bg-white/5 cursor-pointer">
+                                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+                                        <i class="fab fa-paypal text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-sm">PayPal</p>
+                                        <p class="text-[10px] opacity-40 uppercase tracking-tighter">Instant FIAT</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Receiving Destination</label>
+                        <div class="relative">
+                            <i class="fas fa-shield-halved absolute left-5 top-1/2 -translate-y-1/2 opacity-30 text-sm"></i>
+                            <input type="text" id="address" placeholder="Checking network protocols..." 
+                                class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl py-5 pl-14 pr-5 text-sm font-medium focus:border-blue-500 outline-none">
+                        </div>
+                        <p id="helperText" class="mt-3 text-[10px] font-medium opacity-40 ml-1 italic"></p>
+                    </div>
+
+                    <div class="glass-panel bg-black/20 rounded-2xl p-6 border-white/5 space-y-4">
+                        <div class="flex justify-between items-center text-xs opacity-60">
+                            <span>Network Routing Fee</span>
+                            <span class="mono-font font-bold">-$2.50</span>
+                        </div>
+                        <div class="h-[1px] bg-white/5"></div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <span class="block text-[10px] font-bold uppercase tracking-widest opacity-40">Net Settlement</span>
+                                <span class="text-sm font-medium opacity-60">Final Credit Value</span>
+                            </div>
+                            <span class="text-3xl font-bold text-emerald-500 mono-font" id="netPayout">$0.00</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="group relative w-full overflow-hidden rounded-2xl bg-blue-600 p-5 font-bold text-white transition-all hover:bg-blue-500 active:scale-[0.99] shadow-2xl shadow-blue-900/20">
+                        <div class="relative z-10 flex items-center justify-center gap-3 tracking-widest text-sm">
+                            <i class="fas fa-lock"></i>
+                            AUTHORIZE TRANSACTION
+                            <i class="fas fa-chevron-right text-[10px] transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                    </button>
+                </form>
             </div>
         </div>
 
-        <!-- Main Card -->
-        <div class="neo-glass rounded-[2rem] overflow-hidden">
-            <div class="p-7 pb-0 md:p-8 md:pb-0">
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight dark:text-white text-gray-800">Withdrawal<span class="text-blue-600"> Terminal</span></h1>
-                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1 font-medium">Encrypted multi‑sig • real‑time settlement</p>
+        <div class="mt-8 flex flex-col md:flex-row justify-between items-center gap-4 px-4 opacity-30 hover:opacity-60 transition-opacity">
+            <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase">
+                <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> Encrypted AES-256</span>
+                <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> HSM Signed</span>
             </div>
-
-            <!-- Stepper -->
-            <div class="flex px-7 md:px-8 mt-7 gap-3">
-                <div class="h-1 flex-1 bg-blue-600 rounded-full"></div>
-                <div class="h-1 flex-1 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
-                <div class="h-1 flex-1 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
-            </div>
-
-            <form class="p-7 md:p-8 space-y-8" id="withdrawalForm">
-                <!-- Row: Total Balance + Withdrawal Amount -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[11px] font-bold tracking-wider label-primary uppercase ml-1">Total Balance</label>
-                        <div class="card-bg border rounded-2xl p-4 shadow-sm">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Available (USD)</p>
-                            <p class="text-2xl md:text-3xl font-bold font-mono text-balance" id="totalBalanceDisplay">$42,950.00</p>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[11px] font-bold tracking-wider label-primary uppercase ml-1">Withdrawal Amount</label>
-                        <div class="dollar-input-wrapper">
-                            <span class="dollar-sign">$</span>
-                            <input type="number" id="withdrawalAmount" placeholder="0.00" class="w-full input-modern border rounded-2xl py-4 pl-8 pr-5 text-xl font-mono font-semibold transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 withdrawal-input">
-                            <button type="button" id="maxBtn" class="absolute right-4 top-4 text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 max-badge px-2 py-1">MAX</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Network selection -->
-                <div class="space-y-3">
-                    <label class="text-[11px] font-bold tracking-wider label-primary uppercase ml-1">Withdrawal Network</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="method-card">
-                            <input type="radio" name="method" id="btc" class="hidden" checked>
-                            <label for="btc" class="flex flex-col items-center justify-center p-5 border-2 rounded-2xl cursor-pointer transition-all">
-                                <i class="fab fa-bitcoin text-2xl text-orange-500 mb-2"></i>
-                                <span class="font-bold text-sm network-label">Bitcoin (BTC)</span>
-                                <span class="text-[10px] text-gray-500 dark:text-gray-400 uppercase mt-1 font-medium">L1 • Blockchain</span>
-                            </label>
-                        </div>
-                        <div class="method-card">
-                            <input type="radio" name="method" id="paypal" class="hidden">
-                            <label for="paypal" class="flex flex-col items-center justify-center p-5 border-2 rounded-2xl cursor-pointer transition-all">
-                                <i class="fab fa-paypal text-2xl text-blue-500 mb-2"></i>
-                                <span class="font-bold text-sm network-label">PayPal Express</span>
-                                <span class="text-[10px] text-gray-500 dark:text-gray-400 uppercase mt-1 font-medium">Instant FIAT</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Withdrawal Address with smart validation warnings -->
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold tracking-wider label-primary uppercase ml-1">Withdrawal Address</label>
-                    <div class="relative">
-                        <i class="fas fa-map-pin absolute left-5 top-5 text-gray-400 dark:text-gray-500 text-sm"></i>
-                        <input type="text" id="destinationInput" placeholder="Enter crypto wallet address" class="w-full input-modern border rounded-2xl py-4 pl-12 pr-5 text-sm transition-all focus:border-blue-500">
-                    </div>
-                    <!-- Dynamic warning message area -->
-                    <div id="addressWarning" class="text-xs mt-2 px-2 py-1.5 rounded-lg warning-text transition-all flex items-center gap-2" style="display: none;">
-                        <i class="fas fa-exclamation-triangle text-xs"></i>
-                        <span id="warningMessage"></span>
-                    </div>
-                    <p class="text-[10px] text-gray-400 dark:text-gray-500 ml-1 mt-1" id="addressHelper">Bitcoin: legacy/segwit or bc1 address</p>
-                </div>
-
-                <!-- Fee & Net Payout (dynamic calculation) -->
-                <div class="fee-container rounded-2xl p-5 border space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-medium text-fee">Network fee (flat rate)</span>
-                        <span class="font-mono font-semibold text-fee">-$2.50</span>
-                    </div>
-                    <div class="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
-                        <span class="text-sm font-bold text-balance">Net Payout</span>
-                        <span class="font-mono text-green-600 dark:text-green-400 font-bold text-xl md:text-2xl" id="netPayoutValue">$0.00</span>
-                    </div>
-                </div>
-
-                <!-- Confirm action -->
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-5 rounded-2xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-3 glow-btn text-base tracking-wide">
-                    <i class="fas fa-shield-alt text-sm"></i> CONFIRM WITHDRAWAL <i class="fas fa-arrow-right text-xs"></i>
-                </button>
-            </form>
-        </div>
-
-        <!-- Footer encryption badge -->
-        <div class="text-center mt-7">
-            <p class="text-[10px] font-mono text-gray-400 dark:text-gray-600 uppercase tracking-wider font-semibold flex items-center justify-center gap-2">
-                <i class="fas fa-lock text-[10px]"></i> End-to-End AES-256 | HSM Signing | Payout ID: RAND-882X
-            </p>
+            <p class="text-[9px] font-mono">STABLE_REL_1.4.2 // REFERENCE_ID: WD-NX-99</p>
         </div>
     </div>
 
     <script>
-        (function() {
-            // ---------- DOM elements ----------
-            const withdrawalAmountInput = document.getElementById('withdrawalAmount');
-            const netPayoutSpan = document.getElementById('netPayoutValue');
-            const maxBtn = document.getElementById('maxBtn');
-            const btcRadio = document.getElementById('btc');
-            const paypalRadio = document.getElementById('paypal');
-            const destinationInput = document.getElementById('destinationInput');
-            const totalBalanceDisplay = document.getElementById('totalBalanceDisplay');
-            const form = document.getElementById('withdrawalForm');
-            const themeEyeIcon = document.getElementById('themeEyeIcon');
-            const addressHelper = document.getElementById('addressHelper');
-            const addressWarningDiv = document.getElementById('addressWarning');
-            const warningMessageSpan = document.getElementById('warningMessage');
+        const state = {
+            balance: 42950.00,
+            fee: 2.50,
+            theme: localStorage.getItem('theme') || 'dark'
+        };
 
-            // Constants
-            const TOTAL_BALANCE = 42950.00;
-            const NETWORK_FEE = 2.50;
+        const elements = {
+            body: document.body,
+            amount: document.getElementById('withdrawAmount'),
+            net: document.getElementById('netPayout'),
+            max: document.getElementById('maxBtn'),
+            address: document.getElementById('address'),
+            helper: document.getElementById('helperText'),
+            themeBtn: document.getElementById('themeToggle'),
+            themeIcon: document.getElementById('themeIcon'),
+            form: document.getElementById('withdrawalForm'),
+            networks: document.getElementsByName('network')
+        };
 
-            // Display total balance
-            totalBalanceDisplay.innerText = `$${TOTAL_BALANCE.toFixed(2)}`;
-
-            // ---------- VALIDATION FUNCTIONS (Bitcoin & PayPal) ----------
-            function isValidBitcoinAddress(address) {
-                if (!address || address.trim() === "") return false;
-                const cleanAddr = address.trim();
-                // Bitcoin address patterns: starts with 1, 3, or bc1
-                const btcRegex = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,59}$/;
-                if (btcRegex.test(cleanAddr)) return true;
-                // Extra safety for common formats
-                if ((cleanAddr.startsWith('1') || cleanAddr.startsWith('3')) && cleanAddr.length >= 26 && cleanAddr.length <= 35) return true;
-                if (cleanAddr.startsWith('bc1') && cleanAddr.length >= 42 && cleanAddr.length <= 62) return true;
-                return false;
-            }
-
-            function isValidEmail(email) {
-                if (!email || email.trim() === "") return false;
-                const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-                return emailRegex.test(email.trim());
-            }
-
-            function showWarning(message) {
-                warningMessageSpan.innerText = message;
-                addressWarningDiv.style.display = 'flex';
-                addressWarningDiv.classList.add('warning-shake');
-                setTimeout(() => {
-                    addressWarningDiv.classList.remove('warning-shake');
-                }, 600);
-            }
-
-            function hideWarning() {
-                addressWarningDiv.style.display = 'none';
-                warningMessageSpan.innerText = '';
-            }
-
-            function validateAddressField() {
-                const address = destinationInput.value;
-                const isBTCSelected = btcRadio.checked;
-                
-                if (!address || address.trim() === "") {
-                    hideWarning();
-                    return;
-                }
-                
-                if (isBTCSelected) {
-                    if (!isValidBitcoinAddress(address)) {
-                        showWarning("⚠️ Invalid Bitcoin address format. Please enter a valid BTC address (starts with 1, 3, or bc1). Double-check for typos.");
-                    } else {
-                        hideWarning();
-                    }
-                } else {
-                    if (!isValidEmail(address)) {
-                        showWarning("⚠️ Invalid email format. Please enter a valid PayPal email address (example@domain.com).");
-                    } else {
-                        hideWarning();
-                    }
-                }
-            }
-
-            function updateDestinationField() {
-                if (btcRadio.checked) {
-                    destinationInput.placeholder = "Enter crypto wallet address (BTC)";
-                    addressHelper.innerHTML = '<i class="fas fa-circle-info mr-1"></i> Bitcoin address: bc1..., 1..., or 3...';
-                } else {
-                    destinationInput.placeholder = "Enter PayPal email address";
-                    addressHelper.innerHTML = '<i class="fas fa-envelope mr-1"></i> PayPal email where funds will be sent.';
-                }
-                // Re-validate after switching network
-                validateAddressField();
-            }
-
-            // ---------- NET PAYOUT CALCULATION ----------
-            function updateNetPayout() {
-                let amount = parseFloat(withdrawalAmountInput.value);
-                if (isNaN(amount) || amount < 0) amount = 0;
-                if (amount > TOTAL_BALANCE) {
-                    withdrawalAmountInput.value = TOTAL_BALANCE;
-                    amount = TOTAL_BALANCE;
-                }
-                let netPayout = amount - NETWORK_FEE;
-                if (netPayout < 0) netPayout = 0;
-                netPayoutSpan.textContent = `$${netPayout.toFixed(2)}`;
-            }
-
-            function setMaxAmount() {
-                withdrawalAmountInput.value = TOTAL_BALANCE;
-                updateNetPayout();
-            }
-
-            // Event listeners
-            withdrawalAmountInput.addEventListener('input', function(e) {
-                let rawValue = parseFloat(e.target.value);
-                if (!isNaN(rawValue) && rawValue > TOTAL_BALANCE) {
-                    withdrawalAmountInput.value = TOTAL_BALANCE;
-                }
-                updateNetPayout();
+        function init() {
+            applyTheme(state.theme);
+            updateUI();
+            
+            elements.amount.addEventListener('input', calculate);
+            elements.max.addEventListener('click', () => {
+                elements.amount.value = state.balance;
+                calculate();
             });
 
-            btcRadio.addEventListener('change', function() {
-                if (btcRadio.checked) updateDestinationField();
-            });
-            paypalRadio.addEventListener('change', function() {
-                if (paypalRadio.checked) updateDestinationField();
+            elements.networks.forEach(radio => {
+                radio.addEventListener('change', updateUI);
             });
 
-            destinationInput.addEventListener('input', validateAddressField);
-            maxBtn.addEventListener('click', setMaxAmount);
+            elements.themeBtn.addEventListener('click', toggleTheme);
+            
+            elements.form.addEventListener('submit', handleFinalize);
+        }
 
-            // ---------- THEME TOGGLE (dark default / light smooth) ----------
-            function setTheme(theme) {
-                if (theme === 'dark') {
-                    document.body.classList.add('dark-mode');
-                    document.body.classList.remove('light-mode');
-                    localStorage.setItem('terminal_theme', 'dark');
-                    themeEyeIcon.classList.remove('fa-eye');
-                    themeEyeIcon.classList.add('fa-eye-slash');
-                } else {
-                    document.body.classList.add('light-mode');
-                    document.body.classList.remove('dark-mode');
-                    localStorage.setItem('terminal_theme', 'light');
-                    themeEyeIcon.classList.remove('fa-eye-slash');
-                    themeEyeIcon.classList.add('fa-eye');
-                }
+        function calculate() {
+            let val = parseFloat(elements.amount.value) || 0;
+            if (val > state.balance) {
+                val = state.balance;
+                elements.amount.value = val;
             }
+            const net = Math.max(0, val - state.fee);
+            elements.net.textContent = `$${net.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        }
 
-            function toggleTheme() {
-                if (document.body.classList.contains('dark-mode')) {
-                    setTheme('light');
-                } else {
-                    setTheme('dark');
-                }
-            }
+        function updateUI() {
+            const isBTC = document.getElementById('btc').checked;
+            elements.address.placeholder = isBTC ? "Destination BTC Address..." : "PayPal Account Email...";
+            elements.helper.innerHTML = isBTC 
+                ? `<i class="fas fa-info-circle mr-1"></i> Supports SegWit, Native SegWit (bech32), and Legacy.`
+                : `<i class="fas fa-envelope mr-1"></i> Funds will be instantly disbursed to this verified email address.`;
+        }
 
-            const savedTheme = localStorage.getItem('terminal_theme');
-            if (savedTheme === 'light') {
-                setTheme('light');
-            } else {
-                setTheme('dark'); // default dark mode
-            }
+        function toggleTheme() {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(state.theme);
+        }
 
-            themeEyeIcon.addEventListener('click', toggleTheme);
+        function applyTheme(theme) {
+            elements.body.className = theme + '-mode p-4';
+            elements.themeIcon.className = theme === 'dark' ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-blue-600';
+            localStorage.setItem('theme', theme);
+        }
 
-            // ---------- FORM SUBMISSION (professional confirmation) ----------
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+        async function handleFinalize(e) {
+            e.preventDefault();
+            const val = parseFloat(elements.amount.value);
+            const addr = elements.address.value.trim();
 
-                const method = btcRadio.checked ? 'Bitcoin (BTC)' : 'PayPal Express';
-                const rawAmount = parseFloat(withdrawalAmountInput.value);
-                const amount = isNaN(rawAmount) ? 0 : rawAmount;
-                const destination = destinationInput.value.trim();
-                const netPayoutValueFinal = amount - NETWORK_FEE > 0 ? amount - NETWORK_FEE : 0;
+            if (!val || val <= state.fee) return showAlert("Invalid Amount", "Amount must exceed network fees.");
+            if (!addr) return showAlert("Missing Destination", "Please enter a valid receiving address.");
 
-                if (amount <= 0) {
-                    alert('⚠️ Invalid withdrawal amount | Please enter an amount greater than 0.');
-                    return;
-                }
-                if (amount > TOTAL_BALANCE) {
-                    alert(`⚠️ Insufficient balance | Requested $${amount.toFixed(2)} exceeds available $${TOTAL_BALANCE.toFixed(2)}.`);
-                    return;
-                }
-                if ((amount - NETWORK_FEE) <= 0) {
-                    alert(`⚠️ Network fee ($${NETWORK_FEE.toFixed(2)}) exceeds or equals withdrawal amount. Net payout would be $0.00. Increase amount.`);
-                    return;
-                }
-                if (destination === "") {
-                    const fieldHint = btcRadio.checked ? 'crypto wallet address' : 'PayPal email address';
-                    alert(`❌ Missing withdrawal address | Please provide a valid ${fieldHint}.`);
-                    return;
-                }
-                
-                // Final validation before submission (warnings)
-                if (btcRadio.checked && !isValidBitcoinAddress(destination)) {
-                    alert('❌ Invalid Bitcoin address. Please check and correct your withdrawal address.');
-                    return;
-                }
-                if (paypalRadio.checked && !isValidEmail(destination)) {
-                    alert('❌ Invalid PayPal email address. Please enter a valid email (e.g., name@domain.com).');
-                    return;
-                }
+            // Institutional Confirmation Flow
+            const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+            
+            alert(
+                `CONFIRMATION REQUIRED\n` +
+                `----------------------------\n` +
+                `Asset: USD Liquidity\n` +
+                `Network: ${document.querySelector('input[name="network"]:checked').value}\n` +
+                `Gross: $${val.toFixed(2)}\n` +
+                `Fee: $${state.fee.toFixed(2)}\n` +
+                `Net Settlement: $${(val - state.fee).toFixed(2)}\n\n` +
+                `REF: ${ref}\n` +
+                `Status: Pending HSM Signature...`
+            );
+        }
 
-                const referenceID = 'WD-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-                const timestamp = new Date().toLocaleString('en-US', { hour12: false });
-                
-                alert(
-`✅ WITHDRAWAL CONFIRMED (NEXUS SECURE)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Network          : ${method}
-Withdrawal Amount: $${amount.toFixed(2)}
-Network Fee      : $${NETWORK_FEE.toFixed(2)}
-Net Payout       : $${netPayoutValueFinal.toFixed(2)}
-Destination      : ${destination.substring(0, 40)}${destination.length > 40 ? '…' : ''}
-Reference ID     : ${referenceID}
-Timestamp        : ${timestamp}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔒 AES-256 + multi-sig | Terminal #882-XPL`);
-            });
+        function showAlert(title, msg) {
+            alert(`⚠️ ${title.toUpperCase()}\n${msg}`);
+        }
 
-            // Initialize
-            updateDestinationField();
-            withdrawalAmountInput.value = '';
-            updateNetPayout();
-        })();
+        init();
     </script>
 </body>
 </html>
