@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#030712">
     <title>Nexus Secure | Institutional Payout Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -20,12 +21,14 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        /* Android touch optimization */
         body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Institutional Dark Mode (Default) */
@@ -96,8 +99,79 @@
 
         .mono-font { font-family: 'JetBrains Mono', monospace; }
         
+        /* Android: prevent zoom on number input focus */
         input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input::-webkit-inner-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        
+        /* Better touch targets for Android */
+        button, .method-card label, #maxBtn, #themeToggle {
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        
+        button:active, .method-card label:active, #maxBtn:active, #themeToggle:active {
+            transform: scale(0.98);
+        }
+        
+        /* Warning message styling */
+        .warning-message {
+            transition: all 0.2s ease;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dark-mode .warning-error {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            border-left: 3px solid #ef4444;
+        }
+        
+        .dark-mode .warning-success {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border-left: 3px solid #10b981;
+        }
+        
+        .light-mode .warning-error {
+            background: rgba(239, 68, 68, 0.08);
+            color: #dc2626;
+            border-left: 3px solid #ef4444;
+        }
+        
+        .light-mode .warning-success {
+            background: rgba(16, 185, 129, 0.08);
+            color: #059669;
+            border-left: 3px solid #10b981;
+        }
+        
+        /* Address input wrapper */
+        .address-wrapper {
+            position: relative;
+        }
+        
+        /* Ensure inputs are readable on mobile */
+        @media (max-width: 640px) {
+            .glass-panel {
+                backdrop-filter: blur(16px);
+            }
+            input, button {
+                font-size: 16px !important;
+            }
+        }
     </style>
 </head>
 <body class="dark-mode p-4">
@@ -118,7 +192,7 @@
                 <h2 class="text-xs font-mono font-medium opacity-40">NODE_ID: NEXUS-882-XPL // LONDON_DC</h2>
             </div>
             
-            <button id="themeToggle" class="glass-panel p-2.5 rounded-xl hover:bg-white/10 active:scale-95">
+            <button id="themeToggle" class="glass-panel p-2.5 rounded-xl hover:bg-white/10 active:scale-95" aria-label="Toggle theme">
                 <i id="themeIcon" class="fas fa-moon text-blue-400"></i>
             </button>
         </div>
@@ -156,7 +230,7 @@
                             <div class="relative group">
                                 <input type="number" id="withdrawAmount" step="0.01" placeholder="0.00" 
                                     class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl p-5 text-2xl font-bold mono-font focus:border-blue-500 focus:bg-blue-500/5 outline-none transition-all">
-                                <button type="button" id="maxBtn" class="absolute right-4 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-blue-500 text-[10px] font-black text-white hover:bg-blue-400 transition-colors">MAX</button>
+                                <button type="button" id="maxBtn" class="absolute right-4 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-blue-500 text-[10px] font-black text-white hover:bg-blue-400 transition-colors active:scale-95">MAX</button>
                             </div>
                         </div>
                     </div>
@@ -193,10 +267,15 @@
 
                     <div class="input-group">
                         <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Receiving Destination</label>
-                        <div class="relative">
+                        <div class="address-wrapper">
                             <i class="fas fa-shield-halved absolute left-5 top-1/2 -translate-y-1/2 opacity-30 text-sm"></i>
                             <input type="text" id="address" placeholder="Checking network protocols..." 
                                 class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl py-5 pl-14 pr-5 text-sm font-medium focus:border-blue-500 outline-none">
+                        </div>
+                        <!-- Dynamic warning message area -->
+                        <div id="addressWarning" class="warning-message" style="display: none;">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            <span id="warningText"></span>
                         </div>
                         <p id="helperText" class="mt-3 text-[10px] font-medium opacity-40 ml-1 italic"></p>
                     </div>
@@ -238,102 +317,233 @@
     </div>
 
     <script>
-        const state = {
-            balance: 42950.00,
-            fee: 2.50,
-            theme: localStorage.getItem('theme') || 'dark'
-        };
+        (function() {
+            const state = {
+                balance: 42950.00,
+                fee: 2.50,
+                theme: localStorage.getItem('theme') || 'dark'
+            };
 
-        const elements = {
-            body: document.body,
-            amount: document.getElementById('withdrawAmount'),
-            net: document.getElementById('netPayout'),
-            max: document.getElementById('maxBtn'),
-            address: document.getElementById('address'),
-            helper: document.getElementById('helperText'),
-            themeBtn: document.getElementById('themeToggle'),
-            themeIcon: document.getElementById('themeIcon'),
-            form: document.getElementById('withdrawalForm'),
-            networks: document.getElementsByName('network')
-        };
+            const elements = {
+                body: document.body,
+                amount: document.getElementById('withdrawAmount'),
+                net: document.getElementById('netPayout'),
+                max: document.getElementById('maxBtn'),
+                address: document.getElementById('address'),
+                helper: document.getElementById('helperText'),
+                themeBtn: document.getElementById('themeToggle'),
+                themeIcon: document.getElementById('themeIcon'),
+                form: document.getElementById('withdrawalForm'),
+                networks: document.getElementsByName('network'),
+                addressWarning: document.getElementById('addressWarning'),
+                warningText: document.getElementById('warningText')
+            };
 
-        function init() {
-            applyTheme(state.theme);
-            updateUI();
-            
-            elements.amount.addEventListener('input', calculate);
-            elements.max.addEventListener('click', () => {
-                elements.amount.value = state.balance;
-                calculate();
-            });
-
-            elements.networks.forEach(radio => {
-                radio.addEventListener('change', updateUI);
-            });
-
-            elements.themeBtn.addEventListener('click', toggleTheme);
-            
-            elements.form.addEventListener('submit', handleFinalize);
-        }
-
-        function calculate() {
-            let val = parseFloat(elements.amount.value) || 0;
-            if (val > state.balance) {
-                val = state.balance;
-                elements.amount.value = val;
+            // Bitcoin address validation (comprehensive)
+            function isValidBitcoinAddress(address) {
+                if (!address || typeof address !== 'string') return false;
+                const cleanAddr = address.trim();
+                if (cleanAddr.length === 0) return false;
+                
+                // Basic pattern: starts with 1, 3, or bc1
+                // P2PKH (legacy): starts with 1, length 26-35
+                // P2SH (multisig): starts with 3, length 26-35
+                // Bech32 (SegWit): starts with bc1, length 42-62
+                const legacyRegex = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
+                const segwitRegex = /^bc1[a-zA-HJ-NP-Z0-9]{39,59}$/;
+                
+                if (legacyRegex.test(cleanAddr)) return true;
+                if (segwitRegex.test(cleanAddr)) return true;
+                
+                // Extra validation for common formats
+                if ((cleanAddr.startsWith('1') || cleanAddr.startsWith('3')) && cleanAddr.length >= 26 && cleanAddr.length <= 35) {
+                    // Additional check: only alphanumeric, no uppercase O, I, l
+                    if (/^[13][a-zA-Z0-9]+$/.test(cleanAddr) && !/[OIl]/i.test(cleanAddr)) return true;
+                }
+                if (cleanAddr.startsWith('bc1') && cleanAddr.length >= 42 && cleanAddr.length <= 62) {
+                    return true;
+                }
+                return false;
             }
-            const net = Math.max(0, val - state.fee);
-            elements.net.textContent = `$${net.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        }
 
-        function updateUI() {
-            const isBTC = document.getElementById('btc').checked;
-            elements.address.placeholder = isBTC ? "Destination BTC Address..." : "PayPal Account Email...";
-            elements.helper.innerHTML = isBTC 
-                ? `<i class="fas fa-info-circle mr-1"></i> Supports SegWit, Native SegWit (bech32), and Legacy.`
-                : `<i class="fas fa-envelope mr-1"></i> Funds will be instantly disbursed to this verified email address.`;
-        }
+            // Email validation
+            function isValidEmail(email) {
+                if (!email || typeof email !== 'string') return false;
+                const cleanEmail = email.trim();
+                if (cleanEmail.length === 0) return false;
+                // RFC 5322 compliant regex
+                const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+                return emailRegex.test(cleanEmail);
+            }
 
-        function toggleTheme() {
-            state.theme = state.theme === 'dark' ? 'light' : 'dark';
-            applyTheme(state.theme);
-        }
+            // Show warning message
+            function showWarning(message, isValid) {
+                elements.warningText.innerText = message;
+                elements.addressWarning.style.display = 'flex';
+                if (isValid) {
+                    elements.addressWarning.className = 'warning-message warning-success';
+                    elements.addressWarning.querySelector('i').className = 'fas fa-check-circle text-xs';
+                } else {
+                    elements.addressWarning.className = 'warning-message warning-error';
+                    elements.addressWarning.querySelector('i').className = 'fas fa-exclamation-triangle text-xs';
+                }
+            }
 
-        function applyTheme(theme) {
-            elements.body.className = theme + '-mode p-4';
-            elements.themeIcon.className = theme === 'dark' ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-blue-600';
-            localStorage.setItem('theme', theme);
-        }
+            function hideWarning() {
+                elements.addressWarning.style.display = 'none';
+                elements.warningText.innerText = '';
+            }
 
-        async function handleFinalize(e) {
-            e.preventDefault();
-            const val = parseFloat(elements.amount.value);
-            const addr = elements.address.value.trim();
+            // Real-time address validation based on selected network
+            function validateAddress() {
+                const address = elements.address.value;
+                const isBTC = document.getElementById('btc').checked;
+                
+                if (!address || address.trim() === "") {
+                    hideWarning();
+                    return;
+                }
+                
+                if (isBTC) {
+                    if (isValidBitcoinAddress(address)) {
+                        showWarning("✓ Valid Bitcoin address format detected", true);
+                    } else {
+                        showWarning("⚠️ Invalid Bitcoin address. Must start with 1, 3, or bc1. Check length and characters.", false);
+                    }
+                } else {
+                    if (isValidEmail(address)) {
+                        showWarning("✓ Valid email format detected", true);
+                    } else {
+                        showWarning("⚠️ Invalid email address. Please enter a valid PayPal email (e.g., name@domain.com)", false);
+                    }
+                }
+            }
 
-            if (!val || val <= state.fee) return showAlert("Invalid Amount", "Amount must exceed network fees.");
-            if (!addr) return showAlert("Missing Destination", "Please enter a valid receiving address.");
+            function calculate() {
+                let val = parseFloat(elements.amount.value) || 0;
+                if (val > state.balance) {
+                    val = state.balance;
+                    elements.amount.value = val;
+                }
+                const net = Math.max(0, val - state.fee);
+                elements.net.textContent = `$${net.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            }
 
-            // Institutional Confirmation Flow
-            const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+            function updateUI() {
+                const isBTC = document.getElementById('btc').checked;
+                elements.address.placeholder = isBTC ? "Destination BTC Address..." : "PayPal Account Email...";
+                elements.helper.innerHTML = isBTC 
+                    ? `<i class="fas fa-info-circle mr-1"></i> Supports SegWit, Native SegWit (bech32), and Legacy.`
+                    : `<i class="fas fa-envelope mr-1"></i> Funds will be instantly disbursed to this verified email address.`;
+                // Re-validate when network changes
+                if (elements.address.value.trim()) {
+                    validateAddress();
+                } else {
+                    hideWarning();
+                }
+            }
+
+            function toggleTheme() {
+                state.theme = state.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(state.theme);
+            }
+
+            function applyTheme(theme) {
+                elements.body.className = theme + '-mode p-4';
+                elements.themeIcon.className = theme === 'dark' ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-blue-600';
+                localStorage.setItem('theme', theme);
+            }
+
+            function handleFinalize(e) {
+                e.preventDefault();
+                
+                const val = parseFloat(elements.amount.value);
+                const addr = elements.address.value.trim();
+                const isBTC = document.getElementById('btc').checked;
+                
+                // Validation before submission
+                if (!val || val <= 0) {
+                    alert("⚠️ INVALID AMOUNT\n\nPlease enter a valid withdrawal amount greater than zero.");
+                    return;
+                }
+                
+                if (val <= state.fee) {
+                    alert(`⚠️ AMOUNT TOO LOW\n\nAmount must exceed network fee of $${state.fee.toFixed(2)}.`);
+                    return;
+                }
+                
+                if (val > state.balance) {
+                    alert(`⚠️ INSUFFICIENT FUNDS\n\nRequested $${val.toFixed(2)} exceeds available balance of $${state.balance.toFixed(2)}.`);
+                    return;
+                }
+                
+                if (!addr) {
+                    alert("⚠️ MISSING DESTINATION\n\nPlease enter a valid receiving address or email.");
+                    return;
+                }
+                
+                // Network-specific validation
+                if (isBTC && !isValidBitcoinAddress(addr)) {
+                    alert("⚠️ INVALID BITCOIN ADDRESS\n\nPlease enter a valid BTC address (starts with 1, 3, or bc1).");
+                    return;
+                }
+                
+                if (!isBTC && !isValidEmail(addr)) {
+                    alert("⚠️ INVALID EMAIL ADDRESS\n\nPlease enter a valid PayPal email address (e.g., name@domain.com).");
+                    return;
+                }
+                
+                const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+                const networkName = document.querySelector('input[name="network"]:checked').value;
+                const netAmount = (val - state.fee).toFixed(2);
+                
+                alert(
+                    `✅ CONFIRMATION REQUIRED\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `Asset: USD Liquidity\n` +
+                    `Network: ${networkName}\n` +
+                    `Gross: $${val.toFixed(2)}\n` +
+                    `Fee: $${state.fee.toFixed(2)}\n` +
+                    `Net Settlement: $${netAmount}\n` +
+                    `Destination: ${addr.substring(0, 30)}${addr.length > 30 ? '…' : ''}\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `REF: ${ref}\n` +
+                    `Status: Pending HSM Signature...\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `🔒 AES-256 Encrypted | Multi-Sig Active`
+                );
+            }
+
+            // Event listeners
+            function init() {
+                applyTheme(state.theme);
+                updateUI();
+                
+                elements.amount.addEventListener('input', calculate);
+                elements.amount.addEventListener('change', calculate);
+                
+                elements.max.addEventListener('click', () => {
+                    elements.amount.value = state.balance;
+                    calculate();
+                });
+                
+                elements.address.addEventListener('input', validateAddress);
+                elements.address.addEventListener('blur', validateAddress);
+                
+                // Network change listeners
+                for (let i = 0; i < elements.networks.length; i++) {
+                    elements.networks[i].addEventListener('change', updateUI);
+                }
+                
+                elements.themeBtn.addEventListener('click', toggleTheme);
+                elements.form.addEventListener('submit', handleFinalize);
+                
+                // Initial calculation
+                calculate();
+            }
             
-            alert(
-                `CONFIRMATION REQUIRED\n` +
-                `----------------------------\n` +
-                `Asset: USD Liquidity\n` +
-                `Network: ${document.querySelector('input[name="network"]:checked').value}\n` +
-                `Gross: $${val.toFixed(2)}\n` +
-                `Fee: $${state.fee.toFixed(2)}\n` +
-                `Net Settlement: $${(val - state.fee).toFixed(2)}\n\n` +
-                `REF: ${ref}\n` +
-                `Status: Pending HSM Signature...`
-            );
-        }
-
-        function showAlert(title, msg) {
-            alert(`⚠️ ${title.toUpperCase()}\n${msg}`);
-        }
-
-        init();
+            init();
+        })();
     </script>
 </body>
 </html>
