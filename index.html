@@ -10,19 +10,17 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap');
         
         body {
-            background-color: #05070a;
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(210,100%,15%,0.15) 0, transparent 50%), 
-                radial-gradient(at 100% 100%, hsla(220,100%,10%,0.1) 0, transparent 50%);
+            background-color: #ffffff;
+            background-image: none;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #f8fafc;
+            color: #0a0c10;
         }
 
         .neo-glass {
-            background: rgba(13, 17, 23, 0.7);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
 
         .pulse-secure {
@@ -38,7 +36,7 @@
 
         .method-card input:checked + label {
             border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.08);
         }
     </style>
 </head>
@@ -48,37 +46,37 @@
         <div class="flex justify-between items-center mb-6 px-2">
             <div class="flex items-center gap-3">
                 <div class="w-2.5 h-2.5 rounded-full bg-green-500 pulse-secure"></div>
-                <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Security: Tier 3 Active</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Security: Tier 3 Active</span>
             </div>
-            <span class="text-xs font-mono text-blue-400">Terminal ID: #882-XPL</span>
+            <span class="text-xs font-mono text-blue-600">Terminal ID: #882-XPL</span>
         </div>
 
         <div class="neo-glass rounded-[2.5rem] overflow-hidden">
             <div class="p-8 pb-0">
-                <h1 class="text-3xl font-extrabold tracking-tight">Withdrawal Terminal</h1>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Withdrawal Terminal</h1>
                 <p class="text-gray-500 text-sm mt-1">Encrypted multi-signature transaction protocol</p>
             </div>
 
             <div class="flex px-8 mt-8 gap-4">
                 <div class="h-1 flex-1 bg-blue-600 rounded-full"></div>
-                <div class="h-1 flex-1 bg-gray-800 rounded-full"></div>
-                <div class="h-1 flex-1 bg-gray-800 rounded-full"></div>
+                <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
+                <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
             </div>
 
-            <form class="p-8 space-y-8">
+            <form class="p-8 space-y-8" id="withdrawalForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <label class="text-xs font-bold text-gray-500 uppercase ml-1">Asset Allocation</label>
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-4">
-                            <p class="text-sm text-gray-400">Settled Balance</p>
-                            <p class="text-2xl font-bold font-mono text-white">$42,950.00</p>
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-1">Total Balance</label>
+                        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                            <p class="text-sm text-gray-500">Settled Balance</p>
+                            <p class="text-2xl font-bold font-mono text-gray-900" id="totalBalanceDisplay">$42,950.00</p>
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <label class="text-xs font-bold text-gray-500 uppercase ml-1">Request Amount</label>
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-1">Withdrawal Amount</label>
                         <div class="relative">
-                            <input type="number" placeholder="0.00" class="w-full bg-gray-900/80 border border-gray-700 focus:border-blue-500 rounded-2xl py-4 px-5 text-xl font-mono text-white transition-all outline-none">
-                            <button type="button" class="absolute right-4 top-4 text-xs font-bold text-blue-500 hover:text-blue-400">MAX</button>
+                            <input type="number" id="withdrawalAmount" placeholder="0.00" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-2xl py-4 px-5 text-xl font-mono text-gray-900 transition-all outline-none">
+                            <button type="button" id="maxBtn" class="absolute right-4 top-4 text-xs font-bold text-blue-600 hover:text-blue-700">MAX</button>
                         </div>
                     </div>
                 </div>
@@ -88,17 +86,17 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="method-card">
                             <input type="radio" name="method" id="btc" class="hidden" checked>
-                            <label for="btc" class="flex flex-col items-center justify-center p-5 border-2 border-gray-800 rounded-3xl cursor-pointer transition-all hover:border-gray-600">
-                                <i class="fab fa-bitcoin text-2xl text-orange-400 mb-2"></i>
-                                <span class="font-bold text-sm">Bitcoin (BTC)</span>
+                            <label for="btc" class="flex flex-col items-center justify-center p-5 border-2 border-gray-200 rounded-3xl cursor-pointer transition-all hover:border-gray-400">
+                                <i class="fab fa-bitcoin text-2xl text-orange-500 mb-2"></i>
+                                <span class="font-bold text-sm text-gray-800">Bitcoin (BTC)</span>
                                 <span class="text-[10px] text-gray-500 uppercase mt-1">L1 Network</span>
                             </label>
                         </div>
                         <div class="method-card">
                             <input type="radio" name="method" id="paypal" class="hidden">
-                            <label for="paypal" class="flex flex-col items-center justify-center p-5 border-2 border-gray-800 rounded-3xl cursor-pointer transition-all hover:border-gray-600">
-                                <i class="fab fa-paypal text-2xl text-blue-400 mb-2"></i>
-                                <span class="font-bold text-sm">PayPal Express</span>
+                            <label for="paypal" class="flex flex-col items-center justify-center p-5 border-2 border-gray-200 rounded-3xl cursor-pointer transition-all hover:border-gray-400">
+                                <i class="fab fa-paypal text-2xl text-blue-500 mb-2"></i>
+                                <span class="font-bold text-sm text-gray-800">PayPal Express</span>
                                 <span class="text-[10px] text-gray-500 uppercase mt-1">Instant FIAT</span>
                             </label>
                         </div>
@@ -108,32 +106,136 @@
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-gray-500 uppercase ml-1">Destination Credentials</label>
                     <div class="relative">
-                        <i class="fas fa-link absolute left-5 top-5 text-gray-600"></i>
-                        <input type="text" placeholder="Wallet hash or account identifier" class="w-full bg-gray-900/80 border border-gray-700 focus:border-blue-500 rounded-2xl py-4 pl-12 pr-5 text-sm transition-all outline-none">
+                        <i class="fas fa-link absolute left-5 top-5 text-gray-400"></i>
+                        <input type="text" id="destinationInput" placeholder="Enter crypto wallet address" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-2xl py-4 pl-12 pr-5 text-sm transition-all outline-none text-gray-800">
                     </div>
                 </div>
 
-                <div class="bg-black/30 rounded-2xl p-5 border border-gray-800/50 space-y-3">
+                <div class="bg-gray-50/80 rounded-2xl p-5 border border-gray-200 space-y-3">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Network Fee</span>
-                        <span class="font-mono text-gray-300">-$2.50</span>
+                        <span class="font-mono text-gray-600">-$2.50</span>
                     </div>
-                    <div class="flex justify-between text-sm pt-3 border-t border-gray-800">
-                        <span class="text-gray-400 font-bold">Net Payout</span>
-                        <span class="font-mono text-green-400 font-bold text-lg">$0.00</span>
+                    <div class="flex justify-between text-sm pt-3 border-t border-gray-200">
+                        <span class="text-gray-600 font-bold">Net Payout</span>
+                        <span class="font-mono text-green-600 font-bold text-lg" id="netPayoutValue">$0.00</span>
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-5 rounded-[1.5rem] shadow-[0_0_30px_rgba(37,99,235,0.3)] transition-all active:scale-[0.97] flex items-center justify-center gap-3">
-                    INITIATE PAYOUT <i class="fas fa-chevron-right text-xs"></i>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-5 rounded-[1.5rem] shadow-[0_0_30px_rgba(37,99,235,0.2)] transition-all active:scale-[0.97] flex items-center justify-center gap-3">
+                    CONFIRM WITHDRAWAL <i class="fas fa-chevron-right text-xs"></i>
                 </button>
             </form>
         </div>
         
-        <p class="text-center mt-8 text-[10px] text-gray-600 uppercase tracking-widest font-semibold">
+        <p class="text-center mt-8 text-[10px] text-gray-400 uppercase tracking-widest font-semibold">
             <i class="fas fa-lock mr-2"></i> End-to-End AES-256 Bit Encryption Standard
         </p>
     </div>
 
+    <script>
+        // DOM elements
+        const withdrawalAmountInput = document.getElementById('withdrawalAmount');
+        const netPayoutSpan = document.getElementById('netPayoutValue');
+        const maxBtn = document.getElementById('maxBtn');
+        const btcRadio = document.getElementById('btc');
+        const paypalRadio = document.getElementById('paypal');
+        const destinationInput = document.getElementById('destinationInput');
+        const totalBalanceDisplay = document.getElementById('totalBalanceDisplay');
+        const form = document.getElementById('withdrawalForm');
+
+        // Fixed values
+        const TOTAL_BALANCE = 42950.00;
+        const NETWORK_FEE = 2.50;
+
+        // Helper: Update net payout based on withdrawal amount
+        function updateNetPayout() {
+            let amount = parseFloat(withdrawalAmountInput.value);
+            if (isNaN(amount) || amount < 0) {
+                amount = 0;
+            }
+            // Cap at total balance if MAX logic would apply, but display net minus fee
+            let netPayout = amount - NETWORK_FEE;
+            if (netPayout < 0) netPayout = 0;
+            netPayoutSpan.textContent = `$${netPayout.toFixed(2)}`;
+        }
+
+        // Helper: Update destination placeholder based on selected network
+        function updateDestinationPlaceholder() {
+            if (btcRadio.checked) {
+                destinationInput.placeholder = "Enter crypto wallet address";
+            } else if (paypalRadio.checked) {
+                destinationInput.placeholder = "Enter PayPal email address";
+            }
+        }
+
+        // MAX button logic: sets withdrawal amount to total balance
+        function setMaxAmount() {
+            withdrawalAmountInput.value = TOTAL_BALANCE;
+            updateNetPayout();
+        }
+
+        // Event listeners for amount changes
+        withdrawalAmountInput.addEventListener('input', function(e) {
+            let value = parseFloat(e.target.value);
+            if (!isNaN(value) && value > TOTAL_BALANCE) {
+                withdrawalAmountInput.value = TOTAL_BALANCE;
+                updateNetPayout();
+            } else {
+                updateNetPayout();
+            }
+        });
+
+        // When network changes (Bitcoin or PayPal), update placeholder
+        btcRadio.addEventListener('change', function() {
+            if (btcRadio.checked) {
+                updateDestinationPlaceholder();
+            }
+        });
+        paypalRadio.addEventListener('change', function() {
+            if (paypalRadio.checked) {
+                updateDestinationPlaceholder();
+            }
+        });
+
+        // MAX button click
+        maxBtn.addEventListener('click', setMaxAmount);
+
+        // Form submission: simple alert to show withdrawal confirmation (no other changes)
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const method = btcRadio.checked ? 'Bitcoin' : 'PayPal';
+            const amount = parseFloat(withdrawalAmountInput.value);
+            const netPayout = amount - NETWORK_FEE;
+            const destination = destinationInput.value.trim();
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid withdrawal amount.');
+                return;
+            }
+            if (amount > TOTAL_BALANCE) {
+                alert('Withdrawal amount exceeds total balance.');
+                return;
+            }
+            if (netPayout <= 0) {
+                alert(`Network fee ($${NETWORK_FEE.toFixed(2)}) exceeds withdrawal amount. Net payout would be $0.00. Please increase amount.`);
+                return;
+            }
+            if (!destination) {
+                const fieldLabel = btcRadio.checked ? 'crypto wallet address' : 'PayPal email address';
+                alert(`Please enter your ${fieldLabel}.`);
+                return;
+            }
+            
+            alert(`✅ Withdrawal Confirmed!\n\nNetwork: ${method}\nWithdrawal Amount: $${amount.toFixed(2)}\nNetwork Fee: $${NETWORK_FEE.toFixed(2)}\nNet Payout: $${netPayout.toFixed(2)}\nDestination: ${destination}\n\nTransaction secured via AES-256.`);
+            // Optional: Reset form or keep as-is per requirements - not changing anything else
+        });
+
+        // Initialize placeholder on page load (BTC is checked by default)
+        updateDestinationPlaceholder();
+        // Ensure net payout updates on page load if any default value present
+        withdrawalAmountInput.value = '';
+        updateNetPayout();
+    </script>
 </body>
 </html>
