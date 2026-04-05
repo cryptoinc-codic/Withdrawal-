@@ -4,23 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#030712">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Nexus Secure | Institutional Withdrawal Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
         
         :root {
             --primary: #3b82f6;
-            --primary-glow: rgba(59, 130, 246, 0.3);
-            --bg-dark: #030712;
-            --panel-glass: rgba(17, 24, 39, 0.75);
+            --primary-glow: rgba(59, 130, 246, 0.6);
+            --accent-green: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.5);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.5);
         }
 
         * {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -29,16 +30,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-attachment: fixed;
+            overflow-x: hidden;
         }
 
-        /* High-End Dark Mesh Gradient */
+        /* Powerful Dynamic Background */
         body.dark-mode {
-            background: var(--bg-dark);
+            background: #020617;
             color: #f3f4f6;
             background-image: 
-                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 45%);
+                radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2364748b' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
         body.light-mode {
@@ -46,220 +48,246 @@
             color: #0f172a;
         }
 
-        /* Glassmorphism Refinement */
+        /* Glowing Glass Panels */
         .glass-panel {
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
         }
 
         .light-mode .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
         }
 
-        /* Android Interaction States */
-        button:active, .method-card label:active {
-            transform: scale(0.97);
-            filter: brightness(0.9);
-        }
-
+        /* Power Glow Interaction */
         .method-card input:checked + label {
             border-color: var(--primary);
-            background: rgba(59, 130, 246, 0.08);
-            box-shadow: 0 0 0 4px var(--primary-glow);
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px var(--primary-glow);
         }
 
-        .mono-font { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.02em; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.03em; }
 
-        /* Smooth Scanning Line Animation */
-        .shimmer-overlay {
+        /* Authorize Button - Powerful Pulse */
+        #authorizeBtn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #authorizeBtn:hover {
+            box-shadow: 0 0 50px rgba(37, 99, 235, 0.6);
+            transform: scale(1.01);
+        }
+
+        #authorizeBtn::after {
+            content: '';
             position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.03) 50%, transparent 55%);
-            animation: sweep 8s infinite linear;
-            pointer-events: none;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease-out;
         }
 
-        @keyframes sweep {
-            0% { transform: translate(-20%, -20%); }
-            100% { transform: translate(20%, 20%); }
+        #authorizeBtn:active::after {
+            transform: scale(1);
+            transition: 0s;
         }
 
-        /* Android-Optimized Scrollbars */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 10px; }
-
-        /* Form Controls */
-        input[type="number"], input[type="text"] {
-            background: rgba(0, 0, 0, 0.2) !important;
-            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        /* Progress Bar High-Performance Look */
+        .loading-progress-bar {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6);
+            background-size: 200% 100%;
+            animation: pulse-shimmer 2s infinite linear;
+            box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        .light-mode input {
-            background: rgba(255, 255, 255, 0.8) !important;
-            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        @keyframes pulse-shimmer {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
         }
 
-        /* Modal Overlay */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            background: rgba(3, 7, 18, 0.98);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        /* Warning Message Glows */
+        .dark-mode .warning-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
         }
 
-        .loading-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .spinner-ring {
-            width: 70px;
-            height: 70px;
-            border: 2px solid rgba(59, 130, 246, 0.1);
-            border-top: 2px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        .dark-mode .warning-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
         }
 
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* Institutional Modal Backdrop */
+        .warning-modal, .help-modal, .loading-overlay {
+            backdrop-filter: blur(15px) brightness(0.3);
+            -webkit-backdrop-filter: blur(15px) brightness(0.3);
+        }
 
+        /* Input Chrome */
+        input:focus {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .status-pulse-ring {
+            position: relative;
+        }
+        .status-pulse-ring::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            animation: ring-expand 2s infinite;
+        }
+        @keyframes ring-expand {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
     </style>
 </head>
 <body class="dark-mode p-4">
 
     <div class="w-full max-w-2xl relative">
-        <div class="flex justify-between items-center mb-8 px-2">
-            <div class="flex items-center gap-4">
-                <div class="h-12 w-12 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center">
-                    <i class="fas fa-shield-halved text-blue-500 text-xl"></i>
+        <div class="flex flex-wrap justify-between items-end mb-8 px-4 gap-4">
+            <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                    <span class="status-pulse-ring h-2 w-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400">Secure Node Online</span>
                 </div>
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-[10px] font-black tracking-[0.25em] text-blue-400">ENCLAVE SECURE</span>
-                    </div>
-                    <p class="text-[9px] mono-font opacity-40">STABLE_REL: 1.4.2 // NODE: 882</p>
-                </div>
+                <h2 class="text-[9px] font-mono opacity-40 uppercase tracking-widest">Core: Nexus-882 // DC: GBR_LDN_01</h2>
             </div>
             
-            <div class="flex gap-2">
-                <button id="helpBtn" class="glass-panel w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/5">
-                    <i class="fas fa-circle-info text-xs text-blue-400"></i>
+            <div class="flex gap-3">
+                <button id="helpBtn" class="glass-panel w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-white/10" aria-label="Help">
+                    <i class="fas fa-circle-info text-blue-400 text-lg"></i>
                 </button>
-                <button id="themeToggle" class="glass-panel w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/5">
-                    <i id="themeIcon" class="fas fa-moon text-xs text-blue-400"></i>
+                <button id="themeToggle" class="glass-panel w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-white/10" aria-label="Toggle theme">
+                    <i id="themeIcon" class="fas fa-moon text-blue-400 text-lg"></i>
                 </button>
             </div>
         </div>
 
-        <div class="glass-panel rounded-[2.5rem] overflow-hidden relative border border-white/10">
-            <div class="shimmer-overlay"></div>
+        <div class="glass-panel rounded-[3rem] overflow-hidden relative shadow-2xl">
+            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
             
-            <div class="p-8 md:p-12 border-b border-white/5">
-                <div class="flex justify-between items-center">
+            <div class="p-10 md:p-14">
+                <div class="flex justify-between items-start mb-12">
                     <div>
-                        <h1 class="text-3xl font-extrabold tracking-tight">Withdrawal <span class="text-blue-500">Terminal</span></h1>
-                        <p class="text-[11px] opacity-40 font-bold uppercase tracking-widest mt-1">Institutional Settlement Layer</p>
+                        <h1 class="text-4xl md:text-5xl font-black tracking-tighter mb-3">
+                            Withdrawal <span class="text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">Terminal</span>
+                        </h1>
+                        <p class="text-xs opacity-40 font-bold uppercase tracking-[0.2em]">Institutional Asset Settlement Layer</p>
                     </div>
-                    <div class="hidden sm:block px-3 py-1 rounded-md bg-white/5 border border-white/10">
-                        <span class="text-[9px] font-bold mono-font opacity-60">ID: WD-NX-99</span>
+                    <div class="hidden sm:block">
+                        <div class="px-4 py-2 bg-blue-500/5 border border-blue-500/20 rounded-xl">
+                            <span class="text-[10px] font-black text-blue-500 tracking-widest">MULTI-SIG V3.1.4</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="p-8 md:p-12 space-y-10">
                 <form id="withdrawalForm" class="space-y-10">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-4">
-                            <label class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-1">Liquidity Pool</label>
-                            <div class="glass-panel bg-white/5 rounded-3xl p-6 border-white/5">
-                                <p class="text-[10px] opacity-40 mb-1 font-semibold uppercase">Verified USD Balance</p>
-                                <span class="text-3xl font-bold mono-font text-white" id="displayBalance">$14,265.71</span>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.25em] opacity-30 ml-2">Verified Liquidity</label>
+                            <div class="glass-panel bg-white/5 rounded-3xl p-7 border-white/5 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <span class="block text-[10px] opacity-40 mb-1 font-bold">AVAILABLE USD BALANCE</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-3xl md:text-4xl font-bold mono-font text-white" id="displayBalance">$14,265.71</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="space-y-4">
-                            <label class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-1">Disbursement Value</label>
-                            <div class="relative">
+                            <label class="block text-[10px] font-black uppercase tracking-[0.25em] opacity-30 ml-2">Disbursement Value</label>
+                            <div class="relative group">
                                 <input type="number" id="withdrawAmount" step="0.01" placeholder="0.00" 
-                                    class="w-full rounded-3xl p-6 text-3xl font-bold mono-font outline-none focus:ring-2 ring-blue-500/20 transition-all">
-                                <button type="button" id="maxBtn" class="absolute right-4 top-1/2 -translate-y-1/2 px-4 py-2 rounded-xl bg-blue-600 text-[10px] font-black text-white">MAX</button>
+                                    class="w-full glass-panel bg-black/40 border-white/10 rounded-3xl p-7 text-3xl font-bold mono-font focus:border-blue-500 outline-none transition-all placeholder:opacity-20">
+                                <button type="button" id="maxBtn" class="absolute right-5 top-1/2 -translate-y-1/2 px-4 py-2 rounded-xl bg-blue-600 text-[10px] font-black text-white hover:bg-blue-500 shadow-lg shadow-blue-900/40">MAX</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-1">Settlement Protocol</label>
-                        <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-5">
+                        <label class="block text-[10px] font-black uppercase tracking-[0.25em] opacity-30 ml-2">Settlement Protocol</label>
+                        <div class="grid grid-cols-2 gap-5">
                             <div class="method-card">
                                 <input type="radio" name="network" id="btc" value="BTC" class="hidden" checked>
-                                <label for="btc" class="flex items-center gap-4 p-5 rounded-3xl border border-white/5 glass-panel bg-white/5 cursor-pointer">
-                                    <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/20">
-                                        <i class="fab fa-bitcoin text-2xl"></i>
+                                <label for="btc" class="flex items-center gap-5 p-6 rounded-[2rem] border border-white/5 glass-panel bg-white/5 cursor-pointer">
+                                    <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/20 shadow-[0_0_20px_rgba(249,115,22,0.1)]">
+                                        <i class="fab fa-bitcoin text-3xl"></i>
                                     </div>
-                                    <div class="flex-1">
-                                        <p class="font-bold text-sm">Bitcoin</p>
-                                        <p class="text-[9px] opacity-40 font-bold tracking-tighter">L1 MAINNET</p>
+                                    <div>
+                                        <p class="font-black text-base">Bitcoin</p>
+                                        <p class="text-[9px] opacity-40 font-bold uppercase tracking-widest">L1 Network</p>
                                     </div>
                                 </label>
                             </div>
                             <div class="method-card">
                                 <input type="radio" name="network" id="paypal" value="PayPal" class="hidden">
-                                <label for="paypal" class="flex items-center gap-4 p-5 rounded-3xl border border-white/5 glass-panel bg-white/5 cursor-pointer">
-                                    <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
-                                        <i class="fab fa-paypal text-2xl"></i>
+                                <label for="paypal" class="flex items-center gap-5 p-6 rounded-[2rem] border border-white/5 glass-panel bg-white/5 cursor-pointer">
+                                    <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                                        <i class="fab fa-paypal text-3xl"></i>
                                     </div>
-                                    <div class="flex-1">
-                                        <p class="font-bold text-sm">PayPal</p>
-                                        <p class="text-[9px] opacity-40 font-bold tracking-tighter">FIAT BRIDGE</p>
+                                    <div>
+                                        <p class="font-black text-base">PayPal</p>
+                                        <p class="text-[9px] opacity-40 font-bold uppercase tracking-widest">Fiat Bridge</p>
                                     </div>
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-1">Receiving Destination</label>
+                    <div class="space-y-5">
+                        <label class="block text-[10px] font-black uppercase tracking-[0.25em] opacity-30 ml-2">Receiving Destination</label>
                         <div class="relative group">
-                            <i class="fas fa-link absolute left-6 top-1/2 -translate-y-1/2 opacity-20 text-sm"></i>
-                            <input type="text" id="address" placeholder="Checking protocols..." 
-                                class="w-full rounded-3xl py-6 pl-16 pr-6 text-sm font-semibold outline-none focus:ring-2 ring-blue-500/20">
+                            <i class="fas fa-link absolute left-7 top-1/2 -translate-y-1/2 opacity-20 text-sm text-blue-400"></i>
+                            <input type="text" id="address" placeholder="Checking encryption protocols..." 
+                                class="w-full glass-panel bg-black/40 border-white/10 rounded-3xl py-7 pl-16 pr-7 text-sm font-bold focus:border-blue-500 outline-none">
                         </div>
-                        <div id="addressWarning" class="hidden flex items-center gap-3 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-[11px] font-medium text-red-400">
-                            <i class="fas fa-circle-exclamation"></i>
+                        <div id="addressWarning" class="warning-message" style="display: none;">
+                            <i class="fas fa-circle-exclamation text-xs"></i>
                             <span id="warningText"></span>
                         </div>
-                        <p id="helperText" class="text-[10px] font-bold opacity-30 ml-2 italic uppercase tracking-tighter"></p>
+                        <p id="helperText" class="text-[10px] font-bold opacity-30 ml-2 uppercase italic tracking-tighter"></p>
                     </div>
 
-                    <div class="glass-panel bg-black/40 rounded-[2rem] p-8 border border-white/5 space-y-6">
-                        <div class="flex justify-between items-center text-[10px] font-bold tracking-widest opacity-40">
+                    <div class="glass-panel bg-black/60 rounded-[2.5rem] p-10 border border-white/5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500/50"></div>
+                        <div class="flex justify-between items-center text-[10px] font-black tracking-[0.3em] opacity-30 mb-6">
                             <span>NETWORK ROUTING FEE</span>
-                            <span class="mono-font">-$2.50</span>
+                            <span class="mono-font text-red-400">-$2.50</span>
                         </div>
-                        <div class="h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <p class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-400">Net Disbursement</p>
-                                <p class="text-[10px] opacity-40 font-medium">Final HSM Confirmed Value</p>
+                                <span class="block text-[11px] font-black uppercase tracking-[0.3em] text-emerald-500/80">Net Disbursement</span>
+                                <p class="text-[10px] font-bold opacity-30">Final HSM Authenticated Value</p>
                             </div>
-                            <span class="text-4xl font-bold text-emerald-500 mono-font" id="netPayout">$0.00</span>
+                            <span class="text-4xl md:text-5xl font-black text-emerald-500 mono-font drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" id="netPayout">$0.00</span>
                         </div>
                     </div>
 
-                    <button type="button" id="authorizeBtn" class="group relative w-full h-20 rounded-[1.8rem] bg-blue-600 font-black text-white tracking-[0.2em] text-xs shadow-2xl shadow-blue-900/40 active:bg-blue-700">
-                        <div class="relative z-10 flex items-center justify-center gap-3">
-                            <i class="fas fa-fingerprint text-lg"></i>
+                    <button type="button" id="authorizeBtn" class="w-full h-24 rounded-[2rem] font-black text-white tracking-[0.3em] text-xs transition-all active:scale-[0.98]">
+                        <div class="flex items-center justify-center gap-4">
+                            <i class="fas fa-fingerprint text-2xl"></i>
                             AUTHORIZE TRANSACTION
                         </div>
                     </button>
@@ -267,74 +295,120 @@
             </div>
         </div>
 
-        <div class="mt-8 flex flex-col md:flex-row justify-between items-center gap-4 px-6 opacity-40 text-[9px] font-black tracking-[0.15em] uppercase">
-            <div class="flex gap-6">
-                <span class="flex items-center gap-2"><i class="fas fa-lock text-emerald-500"></i> AES-256-GCM</span>
-                <span class="flex items-center gap-2"><i class="fas fa-microchip text-emerald-500"></i> HSM-SIGNED</span>
+        <div class="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 px-8 opacity-40 text-[9px] font-black tracking-[0.2em] uppercase">
+            <div class="flex gap-8">
+                <span class="flex items-center gap-2"><i class="fas fa-shield-halved text-emerald-500"></i> Encrypted AES-256-GCM</span>
+                <span class="flex items-center gap-2"><i class="fas fa-microchip text-emerald-500"></i> HSM Signed Cluster</span>
             </div>
-            <p class="mono-font">SECURE SESSION: 0x82...F92</p>
+            <p class="mono-font">REF: WD-NX-99 // STABLE_REL_1.4.2</p>
         </div>
     </div>
 
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner-ring mb-8"></div>
-        <div class="text-[11px] font-black tracking-[0.3em] text-blue-500 uppercase mb-4">Cryptographic Signing</div>
-        <div class="w-48 h-1 bg-white/5 rounded-full overflow-hidden mb-4">
-            <div class="h-full bg-blue-500" id="progressBar" style="width: 0%"></div>
+        <div class="relative w-24 h-24 mb-10">
+            <div class="absolute inset-0 border-4 border-blue-500/10 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+            <i class="fas fa-vault absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-blue-500 animate-pulse"></i>
         </div>
-        <div class="text-[9px] mono-font opacity-40">Handshake in progress...</div>
+        <div class="text-[12px] font-black tracking-[0.4em] text-blue-500 uppercase mb-6">Securing Enclave Handshake</div>
+        <div class="w-64 h-1 bg-white/5 rounded-full overflow-hidden mb-6">
+            <div class="h-full loading-progress-bar" id="progressBar"></div>
+        </div>
+        <div class="text-[9px] mono-font opacity-40 font-bold">VALIDATING MULTI-SIG AUTHENTICITY...</div>
     </div>
 
-    <div id="warningModal" class="fixed inset-0 z-[12000] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl hidden">
-        <div class="max-w-md w-full glass-panel bg-[#111827]/95 rounded-[3rem] p-10 border border-red-500/20 text-center">
-            <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
-                <i class="fas fa-triangle-exclamation text-3xl text-red-500"></i>
-            </div>
-            <h2 class="text-2xl font-black mb-2 tracking-tight">Requirement Failed</h2>
-            <p class="text-xs opacity-50 font-bold uppercase tracking-widest mb-8">Authorization Declined</p>
-            
-            <div class="bg-black/40 rounded-3xl p-6 mb-8 border border-white/5">
-                <p class="text-[10px] font-black opacity-40 uppercase mb-4">Institutional Minimum Required</p>
-                <p class="text-3xl font-bold text-red-500 mono-font mb-4">$15,000.00</p>
-                <div class="flex justify-between text-[10px] font-bold opacity-60">
-                    <span>CURRENT BALANCE</span>
-                    <span id="currentBalanceWarning" class="mono-font"></span>
+    <div id="warningModal" class="warning-modal">
+        <div class="warning-modal-content p-1">
+            <div class="glass-panel bg-[#0f172a]/95 rounded-[2.8rem] overflow-hidden border-red-500/30">
+                <div class="warning-header p-10">
+                    <div class="warning-icon bg-red-500/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
+                        <i class="fas fa-triangle-exclamation text-4xl text-red-500"></i>
+                    </div>
+                    <h2 class="text-3xl font-black tracking-tighter text-white mb-2 uppercase">Threshold Failed</h2>
+                    <p class="text-[10px] font-black text-red-500 tracking-[0.3em] uppercase">Security Authorization Declined</p>
                 </div>
-                <div class="flex justify-between text-[10px] font-black text-amber-500 mt-2">
-                    <span>TOP-UP REQUIRED</span>
-                    <span id="remainingAmount" class="mono-font"></span>
+                <div class="warning-body px-10 pb-12">
+                    <div class="bg-black/40 rounded-[2rem] p-8 mb-8 border border-white/5">
+                        <p class="text-[10px] font-black opacity-40 tracking-widest mb-4 uppercase">Institutional Minimum Requirement</p>
+                        <p class="text-4xl font-black text-red-500 mono-font mb-4 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">$15,000.00</p>
+                        <div class="flex justify-between text-[10px] font-bold opacity-50 border-t border-white/5 pt-4">
+                            <span>CURRENT LIQUIDITY</span>
+                            <span class="mono-font text-white" id="currentBalanceWarning">$14,265.71</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-black text-amber-500 mt-2">
+                            <span>TOP-UP REQUIRED</span>
+                            <span class="mono-font" id="remainingAmount">$734.29</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <button id="depositBtn" class="deposit-btn h-16 rounded-2xl bg-blue-600 text-xs tracking-widest">
+                            <i class="fas fa-plus-circle mr-2"></i> DEPOSIT FUNDS
+                        </button>
+                        <button id="acknowledgeBtn" class="acknowledge-btn h-16 rounded-2xl bg-red-600 text-xs tracking-widest">
+                            ACKNOWLEDGE & RETURN
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="space-y-4">
-                <button id="depositBtn" class="w-full py-5 rounded-2xl bg-blue-600 font-black text-[10px] tracking-widest text-white uppercase">Deposit Funds</button>
-                <button id="acknowledgeBtn" class="w-full py-5 rounded-2xl bg-white/5 font-black text-[10px] tracking-widest text-white/40 uppercase hover:text-white">Acknowledge</button>
             </div>
         </div>
     </div>
 
-    <div id="helpModal" class="fixed inset-0 z-[11000] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md hidden">
-        <div class="max-w-lg w-full h-[80vh] overflow-y-auto glass-panel bg-[#111827]/98 rounded-[2.5rem] p-10 relative">
-            <button id="closeModal" class="absolute top-8 right-8 text-white/20 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-            <h3 class="text-2xl font-black mb-8 text-blue-500">Institutional Guide</h3>
-            
-            <div class="space-y-8 text-sm leading-relaxed opacity-70 font-medium">
-                <section>
-                    <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">Balance Policy</h4>
-                    <p>Minimum account maintenance of $15,000.00 is required for institutional egress. Accounts below this threshold require liquidity infusion before settlement.</p>
-                </section>
-                <section>
-                    <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">Fee Structure</h4>
-                    <p>Network Routing Fee: $2.50 flat rate. This covers gas, HSM cycles, and cold-storage retrieval protocols.</p>
-                </section>
-                <section>
-                    <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">Security Finality</h4>
-                    <p>Transactions are processed via Multi-Sig HSM. Once "Cryptographic Signing" is complete, the process is irreversible.</p>
-                </section>
-                <section>
-                    <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">Support</h4>
-                    <p class="mono-font">institutional@nexus-secure.io</p>
-                </section>
+    <div id="helpModal" class="help-modal">
+        <div class="help-modal-content p-1">
+            <div class="glass-panel bg-[#0f172a]/98 rounded-[2.5rem] p-12 max-h-[85vh] overflow-y-auto relative border-white/10">
+                <div class="close-modal bg-white/5 hover:bg-white/10" id="closeModal">
+                    <i class="fas fa-times text-white/40"></i>
+                </div>
+                
+                <div class="mb-12">
+                    <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/20">
+                        <i class="fas fa-shield-halved text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-3xl font-black tracking-tighter">Institutional <span class="text-blue-500">Guide</span></h3>
+                    <p class="text-[10px] opacity-40 font-bold uppercase tracking-[0.2em] mt-2">NEXUS SECURE TERMINAL v1.4.2</p>
+                </div>
+                
+                <div class="space-y-10">
+                    <div class="help-section border-none p-0">
+                        <h4 class="flex items-center gap-3 text-[11px] font-black text-blue-400 tracking-[0.2em] mb-4">
+                            <i class="fas fa-chart-line"></i> MINIMUM BALANCE
+                        </h4>
+                        <p class="text-sm leading-relaxed opacity-60 font-medium">To maintain institutional liquidity standards, accounts must hold a minimum threshold of <strong class="text-red-500">$15,000.00 USD</strong> for egress authorization.</p>
+                    </div>
+                    
+                    <div class="help-section border-none p-0">
+                        <h4 class="flex items-center gap-3 text-[11px] font-black text-blue-400 tracking-[0.2em] mb-4">
+                            <i class="fas fa-coins"></i> FEE STRUCTURE
+                        </h4>
+                        <div class="grid grid-cols-1 gap-4 text-xs font-bold">
+                            <div class="p-4 bg-white/5 rounded-xl flex justify-between">
+                                <span class="opacity-40 uppercase">Routing Fee</span>
+                                <span class="text-white mono-font">$2.50 Flat</span>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-xl flex justify-between">
+                                <span class="opacity-40 uppercase">Processing</span>
+                                <span class="text-white mono-font">Institutional L1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section border-none p-0">
+                        <h4 class="flex items-center gap-3 text-[11px] font-black text-blue-400 tracking-[0.2em] mb-4">
+                            <i class="fab fa-bitcoin"></i> NETWORK COMPLIANCE
+                        </h4>
+                        <p class="text-xs leading-relaxed opacity-50 mb-4">Full support for Legacy (1...), P2SH (3...), and Native SegWit (bc1...).</p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-2 text-[10px] font-bold opacity-60"><i class="fas fa-check text-emerald-500"></i> HSM Signing Finality</li>
+                            <li class="flex items-center gap-2 text-[10px] font-bold opacity-60"><i class="fas fa-check text-emerald-500"></i> AES-256 Payload Encryption</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-8 bg-blue-600/10 rounded-[2rem] border border-blue-500/20">
+                        <h4 class="text-[10px] font-black text-blue-400 tracking-widest uppercase mb-4">24/7 Support Desk</h4>
+                        <p class="text-xs font-bold text-white/80 mb-1">institutional@nexus-secure.io</p>
+                        <p class="text-[10px] opacity-40 font-mono">+1 (628) 300-8890</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -377,32 +451,38 @@
             if (elements.remainingAmount) elements.remainingAmount.textContent = `$${remainingToDeposit.toFixed(2)}`;
 
             function isValidBitcoinAddress(address) {
+                if (!address) return false;
+                const cleanAddr = address.trim();
                 const legacyRegex = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
                 const segwitRegex = /^bc1[a-zA-HJ-NP-Z0-9]{39,59}$/;
-                return legacyRegex.test(address.trim()) || segwitRegex.test(address.trim());
+                return legacyRegex.test(cleanAddr) || segwitRegex.test(cleanAddr);
             }
 
             function isValidEmail(email) {
+                if (!email) return false;
                 return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email.trim());
             }
 
-            function showWarning(message) {
+            function showWarning(message, isValid) {
                 elements.warningText.innerText = message;
-                elements.addressWarning.classList.remove('hidden');
+                elements.addressWarning.style.display = 'flex';
+                elements.addressWarning.className = `warning-message mt-4 ${isValid ? 'warning-success' : 'warning-error'}`;
+                const icon = elements.addressWarning.querySelector('i');
+                if (icon) icon.className = isValid ? 'fas fa-check-circle text-xs' : 'fas fa-triangle-exclamation text-xs';
             }
 
-            function hideWarning() { elements.addressWarning.classList.add('hidden'); }
+            function hideWarning() { elements.addressWarning.style.display = 'none'; }
 
             function validateAddress() {
                 const address = elements.address.value;
                 const isBTC = document.getElementById('btc').checked;
                 if (!address || address.trim() === "") { hideWarning(); return; }
                 if (isBTC) {
-                    if (isValidBitcoinAddress(address)) hideWarning();
-                    else showWarning("Invalid Bitcoin address format.");
+                    if (isValidBitcoinAddress(address)) showWarning("Protocol Verified: BTC L1 Destination", true);
+                    else showWarning("Validation Error: Invalid BTC String Format", false);
                 } else {
-                    if (isValidEmail(address)) hideWarning();
-                    else showWarning("Invalid PayPal email format.");
+                    if (isValidEmail(address)) showWarning("Protocol Verified: PayPal Fiat Node", true);
+                    else showWarning("Validation Error: Invalid PayPal Credentials", false);
                 }
             }
 
@@ -415,9 +495,9 @@
 
             function updateUI() {
                 const isBTC = document.getElementById('btc').checked;
-                elements.address.placeholder = isBTC ? "Enter BTC Destination..." : "Enter PayPal Email...";
-                elements.helper.innerHTML = isBTC ? `SegWit / Legacy Protocol Support` : `Verified Institutional Fiats Only`;
-                validateAddress();
+                elements.address.placeholder = isBTC ? "ENCRYPTED BTC DESTINATION..." : "VERIFIED PAYPAL EMAIL...";
+                elements.helper.innerHTML = isBTC ? `<i class="fas fa-lock mr-2 text-blue-500"></i> HSM SIGNING ACTIVE (L1)` : `<i class="fas fa-building mr-2 text-blue-500"></i> INSTITUTIONAL FIAT BRIDGE`;
+                if (elements.address.value.trim()) validateAddress(); else hideWarning();
             }
 
             function toggleTheme() {
@@ -436,22 +516,22 @@
                 const addr = elements.address.value.trim();
                 const isBTC = document.getElementById('btc').checked;
 
-                if (!val || val <= state.fee) { alert("Invalid Amount."); return; }
-                if (!addr) { alert("Destination Required."); return; }
-                if (isBTC && !isValidBitcoinAddress(addr)) { alert("Invalid BTC Address."); return; }
-                if (!isBTC && !isValidEmail(addr)) { alert("Invalid Email."); return; }
+                if (!val || val <= state.fee) { alert("⚠️ AUTHORIZATION DENIED: INVALID VALUE"); return; }
+                if (!addr) { alert("⚠️ AUTHORIZATION DENIED: DESTINATION REQUIRED"); return; }
+                if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ ERROR: INVALID BITCOIN PROTOCOL"); return; }
+                if (!isBTC && !isValidEmail(addr)) { alert("⚠️ ERROR: INVALID PAYPAL NODE"); return; }
 
                 elements.loadingOverlay.classList.add('active');
                 let progress = 0;
                 const interval = setInterval(() => {
-                    progress += 0.66;
-                    elements.progressBar.style.width = progress + '%';
+                    progress += (100 / 150);
+                    if (elements.progressBar) elements.progressBar.style.width = Math.min(progress, 100) + '%';
                 }, 100);
                 
                 setTimeout(() => {
                     clearInterval(interval);
                     elements.loadingOverlay.classList.remove('active');
-                    elements.warningModal.classList.remove('hidden');
+                    elements.warningModal.classList.add('active');
                 }, 15000);
             }
 
@@ -461,11 +541,13 @@
             document.querySelectorAll('input[name="network"]').forEach(i => i.addEventListener('change', updateUI));
             elements.themeBtn.addEventListener('click', toggleTheme);
             elements.authorizeBtn.addEventListener('click', handleAuthorize);
-            elements.helpBtn.addEventListener('click', () => elements.helpModal.classList.remove('hidden'));
-            elements.closeModal.addEventListener('click', () => elements.helpModal.classList.add('hidden'));
-            elements.acknowledgeBtn.addEventListener('click', () => elements.warningModal.classList.add('hidden'));
-            elements.depositBtn.addEventListener('click', () => alert("Institutional Bank Transfer Details Sent to Registered Email."));
+            elements.helpBtn.addEventListener('click', () => elements.helpModal.classList.add('active'));
+            elements.closeModal.addEventListener('click', () => elements.helpModal.classList.remove('active'));
+            elements.acknowledgeBtn.addEventListener('click', () => elements.warningModal.classList.remove('active'));
+            elements.depositBtn.addEventListener('click', () => alert(`🏦 INSTITUTIONAL TOP-UP: $${remainingToDeposit.toFixed(2)}\n\nInstructions sent to your encrypted mailbox.`));
 
+            updateUI();
+            calculate();
             applyTheme(state.theme);
         })();
     </script>
