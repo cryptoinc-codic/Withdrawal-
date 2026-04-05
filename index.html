@@ -165,7 +165,7 @@
             height: 100%;
             background: #030712;
             backdrop-filter: blur(16px);
-            z-index: 1000;
+            z-index: 10000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -303,7 +303,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
-            z-index: 1200;
+            z-index: 12000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -437,7 +437,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
-            z-index: 1100;
+            z-index: 11000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -637,7 +637,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" id="authorizeBtn" class="group relative w-full overflow-hidden rounded-2xl bg-blue-600 p-5 font-bold text-white transition-all hover:bg-blue-500 active:scale-[0.99] shadow-2xl shadow-blue-900/20">
+                    <button type="button" id="authorizeBtn" class="group relative w-full overflow-hidden rounded-2xl bg-blue-600 p-5 font-bold text-white transition-all hover:bg-blue-500 active:scale-[0.99] shadow-2xl shadow-blue-900/20">
                         <div class="relative z-10 flex items-center justify-center gap-3 tracking-widest text-sm">
                             <i class="fas fa-lock"></i>
                             AUTHORIZE TRANSACTION
@@ -753,8 +753,7 @@
                 helper: document.getElementById('helperText'),
                 themeBtn: document.getElementById('themeToggle'),
                 themeIcon: document.getElementById('themeIcon'),
-                form: document.getElementById('withdrawalForm'),
-                networks: document.getElementsByName('network'),
+                authorizeBtn: document.getElementById('authorizeBtn'),
                 addressWarning: document.getElementById('addressWarning'),
                 warningText: document.getElementById('warningText'),
                 loadingOverlay: document.getElementById('loadingOverlay'),
@@ -852,8 +851,7 @@
             function showHelpModal() { elements.helpModal.classList.add('active'); }
             function hideHelpModal() { elements.helpModal.classList.remove('active'); }
 
-            function handleFinalize(e) {
-                e.preventDefault();
+            function handleAuthorize() {
                 const val = parseFloat(elements.amount.value);
                 const addr = elements.address.value.trim();
                 const isBTC = document.getElementById('btc').checked;
@@ -865,12 +863,14 @@
                 if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ INVALID BITCOIN ADDRESS"); return; }
                 if (!isBTC && !isValidEmail(addr)) { alert("⚠️ INVALID EMAIL ADDRESS"); return; }
 
+                // Show loading animation for 9 seconds
                 const progressInterval = showLoadingOverlay();
+                
                 setTimeout(() => {
                     clearInterval(progressInterval);
                     hideLoadingOverlay();
                     const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-                    alert(`✅ TRANSACTION AUTHORIZED\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNet Settlement: $${(val - state.fee).toFixed(2)}\nREF: ${ref}\nStatus: QUEUED`);
+                    alert(`✅ TRANSACTION AUTHORIZED\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNet Settlement: $${(val - state.fee).toFixed(2)}\nREF: ${ref}\nStatus: QUEUED FOR SETTLEMENT`);
                 }, 9000);
             }
 
@@ -892,9 +892,9 @@
             elements.amount.addEventListener('input', calculate);
             elements.max.addEventListener('click', () => { elements.amount.value = state.balance; calculate(); });
             elements.address.addEventListener('input', validateAddress);
-            for (let i = 0; i < elements.networks.length; i++) elements.networks[i].addEventListener('change', updateUI);
+            for (let i = 0; i < document.getElementsByName('network').length; i++) document.getElementsByName('network')[i].addEventListener('change', updateUI);
             elements.themeBtn.addEventListener('click', toggleTheme);
-            elements.form.addEventListener('submit', handleFinalize);
+            elements.authorizeBtn.addEventListener('click', handleAuthorize);
             elements.helpBtn.addEventListener('click', showHelpModal);
             elements.closeModal.addEventListener('click', hideHelpModal);
             if (elements.acknowledgeBtn) elements.acknowledgeBtn.addEventListener('click', hideWarningModal);
